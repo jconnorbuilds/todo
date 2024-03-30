@@ -6,26 +6,25 @@ export default class Project {
   constructor(name, sections = []) {
     this.name = name;
     sections.push(new Section('default'));
+    sections.push(new Section('another'));
     this.sections = sections;
   }
+
   // Static methods and props
   static allProjects = [];
   static logProjects() {
     console.log(this.allProjects);
   }
-  static getDefaultProject() {
+  static get defaultProject() {
     return this.allProjects[0];
   }
-  /**
-   * Returns an existing project instance or throws an error
-   *
-   * @static
-   * @param {string} name
-   */
+  static currentProject = Project.defaultProject;
+
   static getProjectInstance(name) {
     const desiredProject = Project.allProjects.filter(
       (p) => p.name.toLowerCase() === name.toLowerCase()
     );
+
     if (desiredProject.length) {
       return desiredProject;
     } else {
@@ -34,6 +33,9 @@ export default class Project {
   }
 
   // Instance methods and props
+  get className() {
+    return this.name.toLowerCase(); /**@TODO slugify, and ideally require uniqueness */
+  }
   addSection(sectionName) {
     this.sections.push(new Section(sectionName));
   }

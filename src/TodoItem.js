@@ -16,7 +16,7 @@ export default class TodoItem {
 const createTask = (
   taskTitle,
   taskDesc = '',
-  project = Project.getDefaultProject()
+  project = Project.defaultProject
 ) => {
   const task = new TodoItem(taskTitle, taskDesc);
   project.appendTodoItem(task);

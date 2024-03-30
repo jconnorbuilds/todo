@@ -18,14 +18,15 @@ export class AddTaskBtn {
 }
 
 export class TaskForm {
-  constructor(btn, section = 'default', project = 'general') {
+  constructor(btn, project = 'general', section = 'default') {
     this.addTaskBtn = new AddTaskBtn(btn);
-    this.section = section;
     this.project = project;
+    this.section = section;
     this.form = null;
-    this.container = document
-      .querySelector(`div.todo-container.${this.project}.${this.section}`)
-      .querySelector('div.form-container');
+    console.log(this.project, this.section);
+    this.container = document.querySelector(
+      `.${this.project}.${this.section} div.form-container`
+    );
   }
 
   create() {
@@ -76,7 +77,7 @@ export class TaskForm {
 
     // Create the new task
     const newTask = createTask(inputEl.value);
-    DOMCreateTask(newTask);
+    DOMCreateTask(newTask, this.project, this.section);
 
     // Reset the form
     this.form.reset();
