@@ -1,6 +1,6 @@
-import createNewTaskForm from './new-task-form.js';
+import { TaskForm } from './new-task-form.js';
 
-const addTaskBtn = document.querySelector('button.add-todo');
+const addTaskBtn = document.querySelector('div.default button.add-todo');
 
 const DOMCreateProject = (project) => {
   const projectsArea = document.querySelector('div.projects');
@@ -42,7 +42,9 @@ const DOMCreateTask = (task) => {
   );
 };
 
-addTaskBtn.addEventListener('click', () => createNewTaskForm());
+const createNewTaskForm = (e) => new TaskForm(e.target).create();
+
+addTaskBtn.addEventListener('click', (e) => createNewTaskForm(e));
 addTaskBtn.addEventListener('mouseover', toggleIconStyleOnMouseEvents);
 addTaskBtn.addEventListener('mouseout', toggleIconStyleOnMouseEvents);
 

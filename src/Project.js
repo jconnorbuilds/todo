@@ -28,7 +28,7 @@ export default class Project {
 
 const createProject = (project) => {
   const newProject = new Project(project.name);
-  console.log(JSON.stringify(newProject) + ' created');
+  // console.log(JSON.stringify(newProject) + ' created');
   return newProject;
 };
 

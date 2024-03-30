@@ -1,15 +1,13 @@
 import { createTask } from './TodoItem.js';
 import { DOMCreateTask } from './DOM-funcs.js';
 
-let currentFormContainer = null;
-let formIsOpen = false;
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && formIsOpen) closeAndResetForm(e);
-});
+// window.addEventListener('keydown', (e) => {
+//   if (e.key === 'Escape' && formIsOpen) closeAndResetForm(e);
+// });
 
-class AddTaskBtn {
-  constructor(selector) {
-    this.button = document.querySelector(selector);
+export class AddTaskBtn {
+  constructor(button) {
+    this.button = button;
   }
   hide() {
     this.button.style.display = 'none';
@@ -19,33 +17,86 @@ class AddTaskBtn {
   }
 }
 
-const addTaskBtn = new AddTaskBtn('div.default button.add-todo');
+export class TaskForm {
+  constructor(btn, section = 'default', project = 'general') {
+    this.addTaskBtn = new AddTaskBtn(btn);
+    this.section = section;
+    this.project = project;
+    this.form = null;
+  }
 
-const getFormContainer = (e) => {
-  console.log(e.target.closest('div.form-container'));
-  return e.target.closest('div.form-container');
-};
+  static set currentForm(form) {
+    TaskForm._currentForm = form;
+  }
 
-const resetForm = (formContainer = currentFormContainer) => {
-  formContainer.querySelector('form').reset();
-};
+  static set isOpen(bool) {
+    TaskForm._isOpen = bool;
+  }
 
-const hideNewTaskForm = (formContainer = currentFormContainer) => {
-  while (formContainer.firstChild) formContainer.firstChild.remove();
-  formIsOpen = false;
-};
+  get container() {
+    return document
+      .querySelector(`div.todo-container.${this.project}.${this.section}`)
+      .querySelector('div.form-container');
+  }
 
-/**
- * Removes the New Task form from the page and shows the New Task button
- *
- * @param {*} e the click event
- */
-const closeAndResetForm = (e) => {
-  e.preventDefault();
-  resetForm();
-  hideNewTaskForm();
-  addTaskBtn.show();
-};
+  create() {
+    const { form, input, cancelBtn } = createFormElements();
+    this.form = form;
+    TaskForm.currentForm = form;
+
+    this.addTaskBtn.hide();
+    this.container.appendChild(this.form);
+    input.focus();
+
+    cancelBtn.addEventListener('click', this.closeAndResetForm);
+    form.addEventListener('submit', (e) =>
+      this.taskFormSubmitHandler(e, input)
+    );
+  }
+
+  dispose() {
+    while (this.container.firstChild) this.container.firstChild.remove();
+    TaskForm.isOpen = false;
+  }
+
+  reset() {
+    console.log(this.form);
+    this.form.reset();
+  }
+
+  /**
+   * Removes the New Task form from the page and shows the New Task button
+   *
+   * @param {*} e the click event
+   */
+  closeAndResetForm = (e) => {
+    e.preventDefault();
+    this.reset();
+    this.dispose();
+    this.addTaskBtn.show();
+  };
+
+  /**
+   * Handles the creation of a new task. Creates the new task object and adds
+   * it to the DOM, then resets and re-focuses the form so the next task can
+   * be easily added.
+   *
+   * @param {*} e - the submit event
+   * @param {*} inputEl - contains the title of the new task
+   */
+
+  taskFormSubmitHandler = (e, inputEl) => {
+    e.preventDefault();
+
+    // Create the new task
+    const newTask = createTask(inputEl.value);
+    DOMCreateTask(newTask);
+
+    // Reset the form
+    this.form.reset();
+    inputEl.focus();
+  };
+}
 
 /**
  * Creates a Cancel Button
@@ -77,52 +128,3 @@ const createFormElements = () => {
 
   return { form, input, cancelBtn };
 };
-
-/**
- * Handles the creation of a new task. Creates the new task object and adds
- * it to the DOM, then resets and re-focuses the form so the next task can
- * be easily added.
- *
- * @param {*} e - the submit event
- * @param {*} inputEl - contains the title of the new task
- */
-const taskFormSubmitHandler = (e, inputEl) => {
-  e.preventDefault();
-
-  // Create the new task
-  const newTask = createTask(inputEl.value);
-  DOMCreateTask(newTask);
-
-  // Reset the form
-  resetForm(getFormContainer(e));
-  inputEl.focus();
-};
-
-// const hideAddTaskBtn = (container = currentFormContainer) => {
-//   const todoWrapper = container.closest('div.new-todo-wrapper');
-//   const addTaskBtn = todoWrapper.querySelector('button.add-todo');
-//   addTaskBtn.style.display = 'none';
-// };
-
-// const showAddTaskBtn = (container = currentFormContainer) => {
-//   const todoWrapper = container.closest('div.new-todo-wrapper');
-//   const addTaskBtn = todoWrapper.querySelector('button.add-todo');
-//   addTaskBtn.style.display = 'block';
-// };
-
-const createNewTaskForm = () => {
-  currentFormContainer = document.querySelector('div.form-container');
-  const formContainer = currentFormContainer;
-  const { form, input, cancelBtn } = createFormElements();
-
-  addTaskBtn.hide();
-  formContainer.appendChild(form);
-  input.focus();
-
-  cancelBtn.addEventListener('click', closeAndResetForm);
-  form.addEventListener('submit', (e) => taskFormSubmitHandler(e, input));
-
-  formIsOpen = true;
-};
-
-export default createNewTaskForm;
