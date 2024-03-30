@@ -1,0 +1,90 @@
+@import './reset.css';
+
+:root {
+  --main-bg-color: rgb(255, 255, 255);
+  --sidebar-color: rgb(248, 246, 240);
+  --primary-font-color: black;
+  --secondary-font-color: rgb(93, 93, 93);
+  --highlight-color: rgb(215, 64, 87);
+}
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+input {
+  accent-color: var(--highlight-color);
+  outline-color: var(--highlight-color);
+}
+
+div.container {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px auto;
+}
+
+div.sidebar {
+  background-color: var(--sidebar-color);
+}
+
+div.sidebar div.projects {
+  display: grid;
+  row-gap: 1em;
+  padding: 1.5em;
+}
+
+div.main-window {
+  display: grid;
+  grid-template-rows: max-content max-content 4em max-content;
+  background-color: var(--main-bg-color);
+  padding: 3em 5em;
+}
+
+div.main-window div.project-title {
+  font-weight: 600;
+  font-size: 24px;
+  padding-bottom: 1em;
+}
+
+div.main-window button.add-todo {
+  text-align: start;
+  color: var(--secondary-font-color);
+  background-color: var(--main-bg-color);
+  padding: 0;
+  border: none;
+}
+
+button.add-todo i {
+  padding-right: 0.6em;
+  font-size: 1.15em;
+}
+
+div.main-window button.add-todo:hover {
+  color: var(--highlight-color);
+}
+
+div.main-window div.form-container {
+  font-size: 0.8em;
+}
+
+div.main-window div.todo-container {
+  display: grid;
+}
+
+div.todo-container div.todo-item {
+  display: flex;
+  border-bottom: 0.5px solid #ddd;
+}
+
+div.todo-container > * {
+  padding: 8px 0;
+}
+
+div.todo-item input[type='checkbox'] {
+  width: 1em;
+}
+div.todo-item .item-name {
+  padding-left: 1em;
+}

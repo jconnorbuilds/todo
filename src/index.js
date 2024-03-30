@@ -1,2 +1,4 @@
-const myH1 = document.querySelector('h1');
-myH1.style.color = 'orange';
+import './index.css';
+import Project from './Project';
+
+Project.logProjects();
