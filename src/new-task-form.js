@@ -23,18 +23,7 @@ export class TaskForm {
     this.section = section;
     this.project = project;
     this.form = null;
-  }
-
-  static set currentForm(form) {
-    TaskForm._currentForm = form;
-  }
-
-  static set isOpen(bool) {
-    TaskForm._isOpen = bool;
-  }
-
-  get container() {
-    return document
+    this.container = document
       .querySelector(`div.todo-container.${this.project}.${this.section}`)
       .querySelector('div.form-container');
   }
@@ -42,7 +31,6 @@ export class TaskForm {
   create() {
     const { form, input, cancelBtn } = createFormElements();
     this.form = form;
-    TaskForm.currentForm = form;
 
     this.addTaskBtn.hide();
     this.container.appendChild(this.form);
@@ -56,11 +44,9 @@ export class TaskForm {
 
   dispose() {
     while (this.container.firstChild) this.container.firstChild.remove();
-    TaskForm.isOpen = false;
   }
 
   reset() {
-    console.log(this.form);
     this.form.reset();
   }
 
@@ -98,9 +84,6 @@ export class TaskForm {
   };
 }
 
-/**
- * Creates a Cancel Button
- */
 const makeCancelBtn = () => {
   const cancelBtn = document.createElement('button');
   cancelBtn.setAttribute('type', 'button');
@@ -110,9 +93,9 @@ const makeCancelBtn = () => {
 };
 
 /**
- * Creates the form and input elements for the New Task form
+ * Creates the form elements for the New Task form
  *
- * @returns {{ form: any; input: any; }}
+ * @returns {{ form: any; input: any; cancelBtn: any; }}
  */
 const createFormElements = () => {
   const form = document.createElement('form');

@@ -1,56 +1,49 @@
-import { DOMCreateProject } from './DOM-funcs';
+import Section from './Section.js';
 
 export default class Project {
-  projectName;
+  name;
   todoItems = [];
-  constructor(projectName) {
-    this.projectName = projectName;
+  constructor(name, sections = []) {
+    this.name = name;
+    sections.push(new Section('default'));
+    this.sections = sections;
   }
   // Static methods and props
   static allProjects = [];
-
   static logProjects() {
     console.log(this.allProjects);
   }
-
   static getDefaultProject() {
     return this.allProjects[0];
   }
+  /**
+   * Returns an existing project instance or throws an error
+   *
+   * @static
+   * @param {string} name
+   */
+  static getProjectInstance(name) {
+    const desiredProject = Project.allProjects.filter(
+      (p) => p.name.toLowerCase() === name.toLowerCase()
+    );
+    if (desiredProject.length) {
+      return desiredProject;
+    } else {
+      throw ProjectNotFoundError(`The project "${name}" doesn't exist!`);
+    }
+  }
 
   // Instance methods and props
-  appendTodoItem(item) {
+  addSection(sectionName) {
+    this.sections.push(new Section(sectionName));
+  }
+  appendTodoItem(item, section = 'default') {
     this.todoItems.push(item);
   }
   logTodoItems() {
     console.log(this.todoItems);
   }
+  logSections() {
+    for (let s of this.sections) console.log(s.name);
+  }
 }
-
-const createProject = (project) => {
-  const newProject = new Project(project.name);
-  // console.log(JSON.stringify(newProject) + ' created');
-  return newProject;
-};
-
-const STARTING_PROJECTS_DATA = [
-  {
-    name: 'General',
-    items: [],
-  },
-  {
-    name: 'Personal',
-    items: [],
-  },
-  {
-    name: 'Work',
-    items: [],
-  },
-];
-
-STARTING_PROJECTS_DATA.forEach((proj) => {
-  const newProject = createProject(proj);
-  Project.allProjects.push(newProject);
-  DOMCreateProject(proj);
-});
-
-export { createProject };
