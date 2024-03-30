@@ -7,6 +7,20 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && formIsOpen) closeAndResetForm(e);
 });
 
+class AddTaskBtn {
+  constructor(selector) {
+    this.button = document.querySelector(selector);
+  }
+  hide() {
+    this.button.style.display = 'none';
+  }
+  show() {
+    this.button.style.display = 'block';
+  }
+}
+
+const addTaskBtn = new AddTaskBtn('div.default button.add-todo');
+
 const getFormContainer = (e) => {
   console.log(e.target.closest('div.form-container'));
   return e.target.closest('div.form-container');
@@ -30,7 +44,7 @@ const closeAndResetForm = (e) => {
   e.preventDefault();
   resetForm();
   hideNewTaskForm();
-  showNewTaskBtn();
+  addTaskBtn.show();
 };
 
 /**
@@ -84,24 +98,24 @@ const taskFormSubmitHandler = (e, inputEl) => {
   inputEl.focus();
 };
 
-const hideNewTaskBtn = (container = currentFormContainer) => {
-  const todoWrapper = container.closest('div.new-todo-wrapper');
-  const addTaskBtn = todoWrapper.querySelector('button.add-todo');
-  addTaskBtn.style.display = 'none';
-};
+// const hideAddTaskBtn = (container = currentFormContainer) => {
+//   const todoWrapper = container.closest('div.new-todo-wrapper');
+//   const addTaskBtn = todoWrapper.querySelector('button.add-todo');
+//   addTaskBtn.style.display = 'none';
+// };
 
-const showNewTaskBtn = (container = currentFormContainer) => {
-  const todoWrapper = container.closest('div.new-todo-wrapper');
-  const addTaskBtn = todoWrapper.querySelector('button.add-todo');
-  addTaskBtn.style.display = 'block';
-};
+// const showAddTaskBtn = (container = currentFormContainer) => {
+//   const todoWrapper = container.closest('div.new-todo-wrapper');
+//   const addTaskBtn = todoWrapper.querySelector('button.add-todo');
+//   addTaskBtn.style.display = 'block';
+// };
 
 const createNewTaskForm = () => {
   currentFormContainer = document.querySelector('div.form-container');
   const formContainer = currentFormContainer;
   const { form, input, cancelBtn } = createFormElements();
 
-  hideNewTaskBtn();
+  addTaskBtn.hide();
   formContainer.appendChild(form);
   input.focus();
 
