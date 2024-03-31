@@ -12,10 +12,6 @@ export default class Section {
     this.parentContainer = document.querySelector('div.main-window');
   }
 
-  get className() {
-    return slugify(this.name.toLowerCase()); /**@TODO require uniqueness */
-  }
-
   draw(parentContainer = this.parentContainer) {
     parentContainer.append(DOMSection(this));
   }

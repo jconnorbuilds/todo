@@ -36,10 +36,6 @@ export default class Project {
   }
 
   // Instance methods and props
-  get className() {
-    return slugify(this.name); /**@TODO ideally require uniqueness */
-  }
-
   draw() {
     DOMCreateProject(this);
   }
