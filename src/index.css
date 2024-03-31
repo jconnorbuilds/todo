@@ -38,14 +38,15 @@ div.sidebar div.projects {
 div.main-window {
   display: grid;
   grid-template-rows: max-content max-content 4em max-content;
+  grid-auto-rows: max-content;
   background-color: var(--main-bg-color);
   padding: 3em 5em;
 }
 
-div.main-window div.project-title {
-  font-weight: 600;
-  font-size: 24px;
-  padding-bottom: 1em;
+div.main-window h1.project-title {
+  /* font-weight: 600;
+  font-size: 24px; */
+  padding-bottom: 0.5em;
 }
 
 div.main-window button.add-todo {
@@ -69,16 +70,19 @@ div.main-window div.form-container {
   font-size: 0.8em;
 }
 
-div.main-window div.todo-container {
-  display: grid;
+div.main-window div.section-container {
+  /* display: grid; */
 }
 
-div.todo-container div.todo-item {
+div.section-container .new-todo-wrapper {
+  display: flex;
+}
+div.section-container div.todo-item {
   display: flex;
   border-bottom: 0.5px solid #ddd;
 }
 
-div.todo-container > * {
+div.section-container > * {
   padding: 8px 0;
 }
 

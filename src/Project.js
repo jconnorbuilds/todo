@@ -1,13 +1,14 @@
+import { DOMCreateProject } from './DOM-funcs.js';
 import Section from './Section.js';
 
 export default class Project {
   name;
   todoItems = [];
-  constructor(name, sections = []) {
+  constructor(name) {
     this.name = name;
-    sections.push(new Section('default'));
-    sections.push(new Section('another'));
-    this.sections = sections;
+    this.sections = [];
+    this.sections.push(new Section('default', this));
+    Project.allProjects.push(this);
   }
 
   // Static methods and props
@@ -34,11 +35,17 @@ export default class Project {
 
   // Instance methods and props
   get className() {
-    return this.name.toLowerCase(); /**@TODO slugify, and ideally require uniqueness */
+    return slugify(this.name); /**@TODO ideally require uniqueness */
   }
+
+  draw() {
+    DOMCreateProject(this);
+  }
+
   addSection(sectionName) {
     this.sections.push(new Section(sectionName));
   }
+
   appendTodoItem(item, section = 'default') {
     this.todoItems.push(item);
   }

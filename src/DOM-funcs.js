@@ -1,8 +1,3 @@
-import { TaskForm } from './new-task-form.js';
-
-const addTaskBtn = document.querySelector('div.default button.add-todo');
-const secondAddTaskBtn = document.querySelector('div.another button.add-todo');
-
 const DOMCreateProject = (project) => {
   const projectsArea = document.querySelector('div.projects');
   const p = document.createElement('p');
@@ -11,19 +6,11 @@ const DOMCreateProject = (project) => {
   projectsArea.appendChild(p);
 };
 
-const toggleIconStyleOnMouseEvents = (e) => {
-  const icon = e.target.querySelector('i');
-  if (icon) {
-    icon.classList.toggle('fa-solid');
-    icon.classList.toggle('fa-regular');
-  }
-};
-
-const DOMCreateTask = (task, projectClassName, sectionClassName) => {
+const DOMCreateTask = (task, section) => {
   const taskContainer = document.querySelector(
-    `div.todo-container.${projectClassName}.${sectionClassName}`
+    `div.section-container.${section.project.name}.${section.name}`
   );
-  console.log(`div.todo-container.${projectClassName}.${sectionClassName}`);
+  console.log(`div.section-container.${section.project.name}.${section.name}`);
   console.log({ taskContainer });
 
   const newItem = document.createElement('div');
@@ -44,20 +31,5 @@ const DOMCreateTask = (task, projectClassName, sectionClassName) => {
     taskContainer.querySelector('div.new-todo-wrapper')
   );
 };
-
-const createNewTaskForm = (e, project, section) =>
-  new TaskForm(e.target, project, section).create();
-
-addTaskBtn.addEventListener('click', (e) =>
-  createNewTaskForm(e, 'home', 'default')
-);
-addTaskBtn.addEventListener('mouseover', toggleIconStyleOnMouseEvents);
-addTaskBtn.addEventListener('mouseout', toggleIconStyleOnMouseEvents);
-
-secondAddTaskBtn.addEventListener('click', (e) =>
-  createNewTaskForm(e, 'home', 'another')
-);
-secondAddTaskBtn.addEventListener('mouseover', toggleIconStyleOnMouseEvents);
-secondAddTaskBtn.addEventListener('mouseout', toggleIconStyleOnMouseEvents);
 
 export { DOMCreateProject, DOMCreateTask };

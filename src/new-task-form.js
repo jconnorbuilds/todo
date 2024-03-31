@@ -1,66 +1,99 @@
 import { createTask } from './TodoItem.js';
 import { DOMCreateTask } from './DOM-funcs.js';
-
-// window.addEventListener('keydown', (e) => {
-//   if (e.key === 'Escape' && formIsOpen) closeAndResetForm(e);
-// });
+import { slugify } from './utils.js';
 
 export class AddTaskBtn {
-  constructor(button) {
-    this.button = button;
+  constructor() {
+    this.button = AddTaskButton();
+    this.containerSelector = 'div.new-todo-wrapper';
   }
   hide() {
-    this.button.style.display = 'none';
+    this.button.remove();
   }
-  show() {
-    this.button.style.display = 'block';
+  draw(container = document.querySelector(this.containerSelector)) {
+    console.log(container);
+    container.append(this.button);
   }
 }
 
+const AddTaskButton = () => {
+  const button = document.createElement('button');
+  button.classList.add('add-todo');
+  const plusIcon = document.createElement('i');
+  plusIcon.classList.add('fa-regular', 'fa-square-plus');
+
+  const buttonText = document.createElement('span');
+  buttonText.textContent = 'Add Task';
+  button.appendChild(plusIcon);
+  button.appendChild(buttonText);
+
+  button.addEventListener('mouseenter', toggleIconStyleOnMouseEvents);
+  button.addEventListener('mouseleave', toggleIconStyleOnMouseEvents);
+
+  return button;
+};
+
+/**
+ * Handler for mouseenter and mouseleave events.
+ * Toggles between a 'regular' icon and one with a fill when the user
+ * mouses over the Add Task button.
+ *
+ * @param {*} e - the mouseenter or mouseleave event
+ */
+const toggleIconStyleOnMouseEvents = (e) => {
+  const icon = e.target.querySelector('i');
+  if (icon) {
+    icon.classList.toggle('fa-solid');
+    icon.classList.toggle('fa-regular');
+  }
+};
+
 export class TaskForm {
-  constructor(btn, project = 'general', section = 'default') {
-    this.addTaskBtn = new AddTaskBtn(btn);
-    this.project = project;
+  constructor(section) {
     this.section = section;
+    this.project = section.project;
     this.form = null;
     console.log(this.project, this.section);
-    this.container = document.querySelector(
-      `.${this.project}.${this.section} div.form-container`
-    );
+    this.containerSelector = `.${this.project.name}.${this.section.name} div.form-container`;
+    this.addTaskBtn = new AddTaskBtn();
   }
 
-  create() {
+  set isShown(bool) {
+    this._isShown = bool;
+  }
+
+  draw(container) {
     const { form, input, cancelBtn } = createFormElements();
     this.form = form;
 
     this.addTaskBtn.hide();
-    this.container.appendChild(this.form);
+    container.appendChild(this.form);
     input.focus();
 
-    cancelBtn.addEventListener('click', this.closeAndResetForm);
+    cancelBtn.addEventListener('click', this.closeForm);
     form.addEventListener('submit', (e) =>
       this.taskFormSubmitHandler(e, input)
     );
+    this.isShown = true;
   }
 
+  showBtn = (container) => {
+    this.addTaskBtn.draw(container);
+  };
+
   dispose() {
-    while (this.container.firstChild) this.container.firstChild.remove();
+    const container = document.querySelector(this.containerSelector);
+    while (container.firstChild) container.firstChild.remove();
+    this.isShown = false;
   }
 
   reset() {
     this.form.reset();
   }
 
-  /**
-   * Removes the New Task form from the page and shows the New Task button
-   *
-   * @param {*} e the click event
-   */
-  closeAndResetForm = (e) => {
-    e.preventDefault();
-    this.reset();
+  closeForm = () => {
     this.dispose();
-    this.addTaskBtn.show();
+    this.addTaskBtn.draw();
   };
 
   /**
@@ -77,7 +110,7 @@ export class TaskForm {
 
     // Create the new task
     const newTask = createTask(inputEl.value);
-    DOMCreateTask(newTask, this.project, this.section);
+    DOMCreateTask(newTask, this.section);
 
     // Reset the form
     this.form.reset();
