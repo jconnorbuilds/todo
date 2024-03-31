@@ -22,13 +22,9 @@ const NewItemFormWrapper = (section) => {
   formContainer.classList.add('form-container');
   wrapper.append(formContainer);
 
-  const taskForm = section.taskForm;
-  const addTaskBtn = taskForm.addTaskBtn;
-  taskForm.showBtn(wrapper);
-
-  addTaskBtn.button.addEventListener('click', () =>
-    taskForm.draw(formContainer)
-  );
+  const addTaskBtn = section.taskForm.addTaskBtn;
+  console.log(addTaskBtn);
+  wrapper.append(addTaskBtn);
 
   return wrapper;
 };

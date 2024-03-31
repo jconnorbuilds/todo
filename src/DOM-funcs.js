@@ -8,10 +8,8 @@ const DOMCreateProject = (project) => {
 
 const DOMCreateTask = (task, section) => {
   const taskContainer = document.querySelector(
-    `div.section-container.${section.project.name}.${section.name}`
+    `div.section-container.${section.project.slug}.${section.slug}`
   );
-  console.log(`div.section-container.${section.project.name}.${section.name}`);
-  console.log({ taskContainer });
 
   const newItem = document.createElement('div');
   const forId = `task-${task.id}`;

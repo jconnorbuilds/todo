@@ -1,11 +1,13 @@
 import { DOMCreateProject } from './DOM-funcs.js';
 import Section from './Section.js';
+import { slugify } from './utils.js';
 
 export default class Project {
   name;
   todoItems = [];
   constructor(name) {
     this.name = name;
+    this.slug = slugify(name);
     this.sections = [];
     this.sections.push(new Section('default', this));
     Project.allProjects.push(this);
@@ -43,7 +45,9 @@ export default class Project {
   }
 
   addSection(sectionName) {
-    this.sections.push(new Section(sectionName));
+    const newSection = new Section(sectionName, this);
+    this.sections.push(newSection);
+    newSection.draw();
   }
 
   appendTodoItem(item, section = 'default') {

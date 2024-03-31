@@ -19,7 +19,7 @@ Project.currentProject = defaultProject;
 defaultProject.draw();
 // console.log(Project.currentProject.sections);
 Project.currentProject.sections[0].draw();
-// Project.currentProject.add;
+Project.currentProject.addSection('Shit');
 
 // export const addTaskBtn = document.querySelector('div.default button.add-todo');
 // export const secondAddTaskBtn = document.querySelector(
