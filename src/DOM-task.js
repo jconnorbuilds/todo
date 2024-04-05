@@ -1,14 +1,6 @@
-const DOMCreateProject = (project) => {
-  const projectsArea = document.querySelector('div.projects');
-  const p = document.createElement('p');
-  p.classList.add('project');
-  p.textContent = project.name;
-  projectsArea.appendChild(p);
-};
-
-const DOMCreateTask = (task, section) => {
+const DOMDrawTask = (task, section) => {
   const taskContainer = document.querySelector(
-    `div.section-container.${section.project.slug}.${section.slug}`
+    `section.section-container.${section.project.slug}.${section.slug}`
   );
 
   const newItem = document.createElement('div');
@@ -30,4 +22,4 @@ const DOMCreateTask = (task, section) => {
   );
 };
 
-export { DOMCreateProject, DOMCreateTask };
+export default DOMDrawTask;

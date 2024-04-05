@@ -1,4 +1,4 @@
-import { DOMCreateProject } from './DOM-funcs';
+import DOMDrawProject from './DOM-project';
 import './index.css';
 import Project from './Project';
 import Section from './Section.js';
@@ -12,12 +12,12 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-const defaultProject = new Project('home');
+const defaultProject = new Project('Home');
 Project.currentProject = defaultProject;
 defaultProject.draw();
-// console.log(Project.currentProject.sections);
-Project.currentProject.sections[0].draw();
-Project.currentProject.addSection('Shit');
+// Project.currentProject.sections[0].draw();
+// Project.currentProject.addSection('Shit');
+// Project.currentProject.addSection('Fuck');
 
 // export const addTaskBtn = document.querySelector('div.default button.add-todo');
 // export const secondAddTaskBtn = document.querySelector(

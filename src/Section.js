@@ -1,5 +1,5 @@
-import DOMSection from './DOM-project-section.js';
-import { TaskForm } from './new-task-form.js';
+import DOMSection from './DOM-section.js';
+import TaskForm from './DOM-task-form.js';
 import { slugify } from './utils.js';
 
 export default class Section {
@@ -14,5 +14,6 @@ export default class Section {
 
   draw(parentContainer = this.parentContainer) {
     parentContainer.append(DOMSection(this));
+    this.taskForm.draw();
   }
 }

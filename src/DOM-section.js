@@ -1,7 +1,7 @@
 import { slugify } from './utils.js';
 
 const DOMSection = (s) => {
-  const sectionEl = document.createElement('div');
+  const sectionEl = document.createElement('section');
   const projectSlug = slugify(s.project.name);
   const sectionSlug = slugify(s.name);
   sectionEl.classList.add('section-container', projectSlug, sectionSlug);
@@ -23,7 +23,6 @@ const NewItemFormWrapper = (section) => {
   wrapper.append(formContainer);
 
   const addTaskBtn = section.taskForm.addTaskBtn;
-  console.log(addTaskBtn);
   wrapper.append(addTaskBtn);
 
   return wrapper;

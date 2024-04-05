@@ -1,27 +1,42 @@
-import { DOMCreateProject } from './DOM-funcs.js';
+import DOMDrawProject from './DOM-project.js';
 import Section from './Section.js';
 import { slugify } from './utils.js';
 
 export default class Project {
   name;
   todoItems = [];
+  sections;
+  static #_defaultProject;
+  static #_currentProject;
+  static #_allProjects = [];
   constructor(name) {
     this.name = name;
     this.slug = slugify(name);
     this.sections = [];
-    this.sections.push(new Section('default', this));
+    this.addSection('Default');
     Project.allProjects.push(this);
   }
 
   // Static methods and props
-  static allProjects = [];
-  static logProjects() {
-    console.log(this.allProjects);
+  static get allProjects() {
+    return this.#_allProjects;
   }
+
+  static get defaultProject() {
+    return this.#_defaultProject;
+  }
+
   static get defaultProject() {
     return this.allProjects[0];
   }
-  static currentProject = Project.defaultProject;
+
+  static get currentProject() {
+    return this.#_currentProject;
+  }
+
+  static set currentProject(Project) {
+    this.#_currentProject = Project;
+  }
 
   static getProjectInstance(name) {
     const desiredProject = Project.allProjects.filter(
@@ -37,13 +52,14 @@ export default class Project {
 
   // Instance methods and props
   draw() {
-    DOMCreateProject(this);
+    DOMDrawProject(this);
   }
 
   addSection(sectionName) {
     const newSection = new Section(sectionName, this);
     this.sections.push(newSection);
     newSection.draw();
+    
   }
 
   appendTodoItem(item, section = 'default') {
