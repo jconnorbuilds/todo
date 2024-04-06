@@ -1,10 +1,12 @@
 const PRIORITY_LEVELS = ['4', '3', '2', '1'];
-const createPriorityButton = () => {
+const FA_ICON_CLASSES = 'fa-solid fa-shield-halved';
+
+const createPriorityButton = (priorityLevel = 4) => {
   const priorityBtn = document.createElement('div');
   priorityBtn.className = 'priority-btn__ gentle-btn';
-  priorityBtn.dataset.priority = '4';
+  priorityBtn.dataset.priority = priorityLevel;
   priorityBtn.innerHTML = `
-  <i class='fa-solid fa-shield-halved p${priorityBtn.dataset.priority}'></i>
+  <i class='fa-solid fa-shield-halved p${priorityLevel}'></i>
   <span>Priority</span>
   `;
 
@@ -15,72 +17,60 @@ const createPriorityButton = () => {
 
 const handlePriorityBtnClick = (e) => {
   const btn = e.currentTarget;
-  if (
-    e.target.matches(
-      '.priority-btn__icon-container i, .priority-btn__icon-container'
-    )
-  ) {
-    console.log('one', e.target);
-    updateButtonPriority(e.target, btn);
+  const priorityIconSelectors =
+    '.priority-btn__icon-container i, .priority-btn__icon-container';
+
+  if (e.target.matches(priorityIconSelectors)) {
+    updateTaskPriority(e.target, btn);
     togglePriorityButtonExpansion(btn, false);
   } else if (btn.classList.contains('priority-btn--expanded')) {
-    console.log('two', e.target);
     togglePriorityButtonExpansion(btn, false);
   } else {
     togglePriorityButtonExpansion(btn, true);
   }
 };
 
-function updateButtonPriority(target, btn) {
+const updateTaskPriority = (target, btn) => {
   const priorityIconContainer = target.closest('.priority-btn__icon-container');
-  console.log({ priorityIconContainer });
   const newPriorityLevel = priorityIconContainer.dataset.priority;
   btn.dataset.priority = newPriorityLevel;
 
-  const priorityButtonBaseIcon = btn.querySelector('i');
-  priorityButtonBaseIcon.classList.add(`p${newPriorityLevel}`);
-
-  PRIORITY_LEVELS.forEach((level) => {
-    if (newPriorityLevel !== level)
-      priorityButtonBaseIcon.classList.remove(`p${level}`);
-  });
-}
+  btn.querySelector('i').classList = `${FA_ICON_CLASSES} p${newPriorityLevel}`;
+};
 
 /**
  * Expand the priority button to show the selector icons (if expand = true)
  * Otherwise, shrink the button back to the original size with the base
  * icon reflecting the new priority color
  *
- * @param {*} btn
+ * @param {HTMLElement} btn
  * @param {boolean} [expand=true]
  */
 const togglePriorityButtonExpansion = (btn, expand = true) => {
   btn.classList.toggle('priority-btn--expanded', expand);
-  if (expand) {
-    PRIORITY_LEVELS.forEach((level) => {
-      addExpandedButtonIcon(btn, level);
-    });
-  } else {
-    while (btn.children.length > 2) {
-      btn.lastChild.remove();
-      btn.classList.remove('priority-btn--expanded');
-    }
-  }
+  expand ? expandPriorityButton(btn) : collapsePriorityButton(btn);
 };
 
-function addExpandedButtonIcon(btn, level) {
-  const faIconClasses = 'fa-solid fa-shield-halved';
+const expandPriorityButton = (btn, level) => {
+  PRIORITY_LEVELS.forEach((level) => {
+    const priorityLevelButton = document.createElement('span');
+    priorityLevelButton.classList.add(
+      'priority-btn__icon-container',
+      'gentle-btn'
+    );
+    priorityLevelButton.dataset.priority = level;
+    priorityLevelButton.innerHTML = `<i class="${FA_ICON_CLASSES} p${level}"></i>`;
 
-  const priorityLevelButton = document.createElement('span');
-  priorityLevelButton.classList.add(
-    'priority-btn__icon-container',
-    'gentle-btn'
-  );
-  priorityLevelButton.dataset.priority = level;
+    btn.append(priorityLevelButton);
+  });
+};
 
-  priorityLevelButton.innerHTML = `<i class="${faIconClasses} p${level}"></i>`;
-
-  btn.append(priorityLevelButton);
-}
+// There's definitely a better way to do this
+const collapsePriorityButton = (btn) => {
+  while (btn.children.length > 2) {
+    btn.lastChild.remove();
+    btn.classList.remove('priority-btn--expanded');
+  }
+};
 
 export default createPriorityButton;
