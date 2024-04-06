@@ -1,5 +1,5 @@
 import DOMSection from './DOM-section.js';
-import TaskForm from './DOM-task-form.js';
+import TaskForm from './TaskForm.js';
 import { slugify } from './utils.js';
 
 export default class Section {
