@@ -1,12 +1,13 @@
 import { createTask } from './Task.js';
 import DOMDrawTask from './DOM-task.js';
 import { toggleIconStyleOnMouseEvents } from './DOM-task-form.js';
-import priorityBtnComponent from './priorityBtnComponent.js';
+import PriorityButton from './priorityBtnComponent.js';
 
 export default class TaskForm {
   constructor(section) {
     this.section = section;
     this.project = section.project;
+    this.priorityButton = new PriorityButton(this);
     this.form = this.makeForm();
     this.addTaskBtn = this.makeAddTaskBtn();
   }
@@ -18,12 +19,13 @@ export default class TaskForm {
   }
 
   reset() {
-    // this.formElements.form.reset();
     this.form.reset();
+    this.priorityButton.reset();
+    this.form.querySelector('input').focus();
   }
 
   closeForm = () => {
-    // this.formElements.form.remove();
+    this.reset();
     this.form.remove();
     this.addTaskBtn.style.display = 'block';
   };
@@ -56,26 +58,6 @@ export default class TaskForm {
     form.querySelector('input').focus();
   }
 
-  /**
-   * Creates the form elements for the New Task form
-   *
-   * @returns {{ form: any; input: any; cancelBtn: any; }}
-   */
-  makeFormElements() {
-    const form = document.createElement('form');
-    const input = document.createElement('input');
-    input.setAttribute('type', 'text');
-    const submitBtn = document.createElement('input');
-    submitBtn.setAttribute('type', 'submit');
-    const cancelBtn = this.makeCancelBtn();
-
-    form.appendChild(input);
-    form.appendChild(submitBtn);
-    form.appendChild(cancelBtn);
-
-    return { form, input };
-  }
-
   makeForm() {
     const form = document.createElement('form');
     form.classList.add('task-form');
@@ -104,10 +86,11 @@ export default class TaskForm {
     const submitBtn = document.createElement('button');
     submitBtn.setAttribute('type', 'submit');
     submitBtn.textContent = 'Add task';
+
     const cancelBtn = this.makeCancelBtn();
 
     // Build the form
-    const priorityBtn = priorityBtnComponent();
+    const priorityBtn = this.priorityButton.button;
     detailsArea.append(priorityBtn);
     editingArea.append(taskNameField);
     editingArea.append(descriptionField);
@@ -146,8 +129,8 @@ export default class TaskForm {
   };
 
   /**
-   * Handles the creation of a new task. Creates the new task object and adds
-   * it to the DOM, then resets and re-focuses the form so the next task can
+   * Creates the new task object and adds it to the DOM,
+   * then resets and re-focuses the form so the next task can
    * be easily added.
    *
    * @param {*} e - the submit event
@@ -162,6 +145,5 @@ export default class TaskForm {
 
     // Reset the form
     this.reset();
-    this.form.focus;
   };
 }

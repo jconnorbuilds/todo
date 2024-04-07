@@ -217,7 +217,7 @@ form.task-form input[type='text']:first-child {
   color: var(--priority-urgent);
 }
 
-.priority-btn--expanded .priority-btn__icon-container {
+.priority-btn--expanded .priority-btn__level-btn {
   padding: 0 8px;
   border-radius: 4px;
 }
@@ -225,6 +225,6 @@ form.task-form input[type='text']:first-child {
 .priority-btn__.priority-btn--expanded:hover {
   background-color: inherit;
 }
-.priority-btn--expanded .priority-btn__icon-container:hover {
+.priority-btn--expanded .priority-btn__level-btn:hover {
   background-color: #eee;
 }
