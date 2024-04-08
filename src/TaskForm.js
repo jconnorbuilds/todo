@@ -1,5 +1,4 @@
 import { createTask } from './Task.js';
-import DOMDrawTask from './DOM-task.js';
 import { toggleIconStyleOnMouseEvents } from './DOM-task-form.js';
 import PriorityButton from './priorityBtnComponent.js';
 
