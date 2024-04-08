@@ -10,6 +10,11 @@ export default class Section {
     this.project = project;
     this.taskForm = new TaskForm(this);
     this.parentContainer = document.querySelector('div.main-window');
+    this.taskContainerSelector = `.section-container.${this.project.slug}.${this.slug}`;
+  }
+
+  get taskContainer() {
+    return document.querySelector(this.taskContainerSelector);
   }
 
   draw(parentContainer = this.parentContainer) {

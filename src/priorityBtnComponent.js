@@ -6,7 +6,6 @@ const BUTTON_CONTAINER_CLASS = 'priority-btn__level-buttons-container';
 export default class PriorityButton {
   constructor(form, priorityLevel = 4) {
     this.form = form;
-    console.log(form);
     this.priorityLevel = priorityLevel;
     this.button = this.createButton();
   }

@@ -123,7 +123,7 @@ div.todo-item input[type='checkbox'] {
   width: 18px;
 }
 
-div.todo-item .item-name {
+div.todo-item label {
   padding-left: 1em;
 }
 

@@ -9,7 +9,8 @@ export default class Task {
   _isDeleted = false;
   _isCompleted = false;
 
-  constructor(data) {
+  constructor(section, data) {
+    this.section = section;
     this.title = data.title;
     this.description = data.description;
     this.priority = data.priority;
@@ -34,6 +35,23 @@ export default class Task {
 
   set isCompleted(bool) {
     this._isCompleted = bool;
+  }
+
+  draw() {
+    const taskContainer = this.section.taskContainer;
+    const FOR_ID = `task-${this.id}`;
+    const newItem = document.createElement('div');
+    newItem.classList = 'todo-item';
+
+    newItem.innerHTML = `
+    <input type="checkbox" id="${FOR_ID}">
+    <label for="${FOR_ID}">${this.title}</label>
+    `;
+
+    taskContainer.insertBefore(
+      newItem,
+      taskContainer.querySelector('div.new-todo-wrapper')
+    );
   }
 }
 
