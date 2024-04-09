@@ -41,11 +41,17 @@ export default class Task {
     const taskContainer = this.section.taskContainer;
     const FOR_ID = `task-${this.id}`;
     const newItem = document.createElement('div');
-    newItem.classList = 'todo-item';
+    newItem.classList = 'todo-item__';
 
     newItem.innerHTML = `
-    <input type="checkbox" id="${FOR_ID}">
-    <label for="${FOR_ID}">${this.title}</label>
+    <div class="todo-item__checkbox">
+    <input class="p${this.priority}" type="checkbox" id="${FOR_ID}">
+    <span class="checkmark"</span>
+    </div>
+    <div class="todo-item__todo-info">
+    <div class="todo-item__main-title">${this.title}</div>
+    <div class="todo-item__description">${this.description}</div>
+    </div>
     `;
 
     taskContainer.insertBefore(

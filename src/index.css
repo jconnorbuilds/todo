@@ -7,11 +7,86 @@
   --secondary-font-color: rgb(93, 93, 93);
   --highlight-color: #d74057;
   --highlight-color-disabled: rgb(224, 131, 145);
-  --priority-default: #aaa;
-  --priority-low: #556f44;
-  --priority-mid: #ffd131;
-  --priority-urgent: #d74057;
+  --priority-default-rgb-values: 170, 170, 170;
+  --priority-urgent-rgb-values: 215, 64, 87;
+  --priority-low-rgb-values: 85, 111, 68;
+  --priority-mid-rgb-values: 255, 209, 49;
+  --priority-urgent-rgb-values: 215, 64, 87;
+  --priority-default: rgb(var(--priority-default-rgb-values));
+  --priority-low: rgb(var(--priority-low-rgb-values));
+  --priority-mid: rgb(var(--priority-mid-rgb-values));
+  --priority-urgent: rgb(var(--priority-urgent-rgb-values));
 }
+
+/* Style reference https://moderncss.dev/pure-css-custom-checkbox-style/ */
+input[type='checkbox'] {
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  margin: 1px 0;
+  width: 0.6em;
+  height: 0.6em;
+  border: 1px solid #aaa;
+  border-radius: 0.15em;
+  display: grid;
+  place-content: center;
+  transform: scale(1);
+}
+
+input[type='checkbox'].p1 {
+  border: 1.8px solid var(--priority-urgent);
+  background-color: rgba(var(--priority-urgent-rgb-values), 0.1);
+}
+input[type='checkbox'].p2 {
+  border: 1.8px solid var(--priority-mid);
+  background-color: rgba(var(--priority-mid-rgb-values), 0.1);
+}
+input[type='checkbox'].p3 {
+  border: 1.8px solid var(--priority-low);
+  background-color: rgba(var(--priority-low-rgb-values), 0.1);
+}
+input[type='checkbox'].p4 {
+  border: 1px solid var(--priority-default);
+  /* background-color: rgba(var(--priority-default-rgb-values), 0.1); */
+}
+
+input[type='checkbox']::before {
+  content: '';
+  width: 0.6em;
+  height: 0.6em;
+  transform-origin: origin;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  opacity: 0;
+  /* transition: 10ms transform ease-in-out; */
+  box-shadow: inset 1em 1em var(--highlight-color);
+  transition: opacity 300ms ease-in-out;
+}
+
+input[type='checkbox']:checked::before {
+  transform: scale(0.5);
+  opacity: 100;
+}
+
+input[type='checkbox']:not(:checked):hover::before {
+  transform: scale(0.5);
+  opacity: 100;
+  transition: opacity 300ms ease-in-out;
+  /* also possible to use background color, but box-shadow makes it printable */
+  box-shadow: inset 1em 1em rgba(56, 56, 56, 0.3);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.todo-item__checkbox {
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 1em auto;
+  /* gap: 0.5em; */
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -110,21 +185,25 @@ div.main-window section.section-container {
   padding-bottom: 1em;
 }
 
-section.section-container div.todo-item {
-  display: flex;
-  border-bottom: 0.5px solid #ddd;
-}
-
 section.section-container > * {
   padding: 8px 0;
 }
 
-div.todo-item input[type='checkbox'] {
-  width: 18px;
+.todo-item__ {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border-bottom: 0.5px solid #ddd;
 }
 
-div.todo-item label {
-  padding-left: 1em;
+.todo-item__todo-info > div {
+  display: flex;
+  align-items: center;
+}
+
+.todo-item__description {
+  font-size: 0.9em;
+  color: var(--secondary-font-color);
 }
 
 form.task-form {

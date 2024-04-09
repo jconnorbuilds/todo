@@ -26,11 +26,11 @@ export default class TaskForm {
     this.form.querySelector('input').focus();
   }
 
-  closeForm = () => {
+  closeForm() {
     this.form.remove();
     this.reset();
     this.addTaskBtn.style.display = 'block';
-  };
+  }
 
   makeAddTaskBtn() {
     const button = document.createElement('button');
