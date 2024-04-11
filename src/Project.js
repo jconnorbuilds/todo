@@ -3,13 +3,16 @@ import Section from './Section.js';
 import { slugify } from './utils.js';
 
 export default class Project {
+  static #_uniqueId = 0;
   name;
   todoItems = [];
   sections;
-  static #_defaultProject;
-  static #_currentProject;
-  static #_allProjects = [];
+  #isActive = false;
+  static #defaultProject;
+  // static #activeProject;
+  static #allProjects = [];
   constructor(name) {
+    this.id = Project.uniqueId;
     this.name = name;
     this.slug = slugify(name);
     this.sections = [];
@@ -18,25 +21,30 @@ export default class Project {
   }
 
   // Static methods and props
+  static get uniqueId() {
+    return this.#_uniqueId++;
+  }
+
   static get allProjects() {
-    return this.#_allProjects;
+    return this.#allProjects;
   }
 
   static get defaultProject() {
-    return this.#_defaultProject;
+    return this.#defaultProject;
   }
 
   static get defaultProject() {
     return this.allProjects[0];
   }
 
-  static get currentProject() {
-    return this.#_currentProject;
-  }
+  // static get activeProject() {
+  //   return this.#activeProject;
+  // }
 
-  static set currentProject(Project) {
-    this.#_currentProject = Project;
-  }
+  // static set activeProject(Project) {
+  //   this.allProjects.forEach((project) => project.isActive = false)
+  //   this.#activeProject = Project;
+  // }
 
   static getProjectInstance(name) {
     const desiredProject = Project.allProjects.filter(
@@ -50,6 +58,18 @@ export default class Project {
     }
   }
 
+  set isActive(active) {
+    if (active) {
+      Project.allProjects.forEach((project) => (project.#isActive = false));
+    }
+    this.#isActive = active;
+    this.updateUI();
+  }
+
+  get isActive() {
+    return this.#isActive;
+  }
+
   // Instance methods and props
   draw() {
     DOMDrawProject(this);
@@ -59,7 +79,6 @@ export default class Project {
     const newSection = new Section(sectionName, this);
     this.sections.push(newSection);
     newSection.draw();
-    
   }
 
   appendTodoItem(item, section = 'default') {
@@ -70,5 +89,19 @@ export default class Project {
   }
   logSections() {
     for (let s of this.sections) console.log(s.name);
+  }
+  updateUI() {
+    // Update styles for the sidebar project list
+    const projects = document.querySelectorAll('.sidebar__project');
+    console.log(projects);
+    projects.forEach((project) => {
+      +project.dataset.id === this.id
+        ? this.#toggleActiveClass(project, true)
+        : this.#toggleActiveClass(project, false);
+    });
+  }
+
+  #toggleActiveClass(element, isActive) {
+    element.classList.toggle('active', isActive);
   }
 }

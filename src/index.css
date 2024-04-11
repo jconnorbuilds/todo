@@ -16,6 +16,7 @@
   --priority-low: rgb(var(--priority-low-rgb-values));
   --priority-mid: rgb(var(--priority-mid-rgb-values));
   --priority-urgent: rgb(var(--priority-urgent-rgb-values));
+  --button-hover-color: #ddd;
 }
 
 /* Style reference https://moderncss.dev/pure-css-custom-checkbox-style/ */
@@ -78,6 +79,26 @@ input[type='checkbox']:not(:checked):hover::before {
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
+li {
+  list-style: none;
+}
+
+button,
+.button,
+div.gentle-btn {
+  border: none;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: inherit;
+}
+
+div.gentle-btn {
+  background-color: #eee;
+}
+
 .todo-item__checkbox {
   font-size: 2rem;
   font-weight: bold;
@@ -97,15 +118,6 @@ body {
 input {
   accent-color: var(--highlight-color);
   outline-color: var(--highlight-color);
-}
-
-button,
-.button,
-div.gentle-btn {
-  cursor: pointer;
-  color: #333;
-  background-color: #eee;
-  border-radius: 4px;
 }
 
 button:disabled {
@@ -140,17 +152,68 @@ button[type='submit']:disabled {
 div.container {
   height: 100vh;
   display: grid;
-  grid-template-columns: 250px auto;
+  grid-template-columns: 225px auto;
 }
 
-div.sidebar {
+.sidebar__ {
   background-color: var(--sidebar-color);
 }
 
-div.sidebar div.projects {
+.sidebar__ > * {
+  padding: 1em;
+  padding-bottom: 0;
+}
+
+.sidebar__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar__heading-button {
+  font-size: 1em;
+  padding: 0 0.5em;
+  border: none;
+  border-radius: 4px;
+  background-color: inherit;
+  color: var(--secondary-font-color);
+  transition: background-color 200ms;
+}
+.sidebar__heading-button:hover {
+  background-color: var(--button-hover-color);
+}
+.sidebar__ .heading i {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+.sidebar__ .heading:hover i {
+  opacity: 100;
+}
+
+.sidebar__projects-list {
   display: grid;
-  row-gap: 1em;
+
+  gap: 1em;
   padding: 1.5em;
+  padding-right: 0;
+}
+
+.sidebar__project {
+  display: flex;
+  border-radius: 4px 0 0 4px;
+  font-weight: 500;
+}
+
+.sidebar__project button {
+  flex-grow: 1;
+}
+
+.sidebar__project.active {
+  background-color: var(--main-bg-color);
+}
+
+.sidebar__project:hover {
+  background-color: var(--button-hover-color);
 }
 
 div.main-window {

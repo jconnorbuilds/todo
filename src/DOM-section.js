@@ -2,11 +2,12 @@ import { slugify } from './utils.js';
 
 const DOMSection = (s) => {
   const sectionEl = document.createElement('section');
+  const defaultSectionName = 'Default';
   const projectSlug = slugify(s.project.name);
   const sectionSlug = slugify(s.name);
   sectionEl.classList.add('section-container', projectSlug, sectionSlug);
   const title = document.createElement('div');
-  title.textContent = s.name;
+  title.textContent = s.name === defaultSectionName ? '' : s.name;
   title.classList.add('section-title');
   sectionEl.appendChild(title);
   sectionEl.appendChild(NewItemFormWrapper(s));

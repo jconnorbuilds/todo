@@ -1,7 +1,5 @@
-import DOMDrawProject from './DOM-project';
 import './index.css';
 import Project from './Project';
-import Section from './Section.js';
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -15,11 +13,9 @@ window.addEventListener('keydown', (e) => {
 const defaultProject = new Project('Home');
 Project.currentProject = defaultProject;
 defaultProject.draw();
-// Project.currentProject.sections[0].draw();
-// Project.currentProject.addSection('Shit');
-// Project.currentProject.addSection('Fuck');
+defaultProject.isActive = true;
 
-// export const addTaskBtn = document.querySelector('div.default button.add-todo');
-// export const secondAddTaskBtn = document.querySelector(
-//   'div.another button.add-todo'
-// );
+const anotherProject = new Project('Second Project');
+anotherProject.draw();
+
+console.log(Project.allProjects);

@@ -19,6 +19,6 @@ export default class Section {
 
   draw(parentContainer = this.parentContainer) {
     parentContainer.append(DOMSection(this));
-    this.taskForm.draw();
+    // this.taskForm.draw();
   }
 }

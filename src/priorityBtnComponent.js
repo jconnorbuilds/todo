@@ -13,7 +13,7 @@ export default class PriorityButton {
   createButton() {
     const priorityBtn = document.createElement('div');
     priorityBtn.className = 'priority-btn__ gentle-btn';
-    // priorityBtn.setAttribute('tabindex', '0');
+    priorityBtn.setAttribute('tabindex', '0');
     priorityBtn.dataset.priority = this.priorityLevel;
     priorityBtn.innerHTML = `
     <i class='${FA_ICON_CLASSES} p${this.priorityLevel}'></i>

@@ -46,6 +46,7 @@ export default class TaskForm {
     button.addEventListener('mouseenter', toggleIconStyleOnMouseEvents);
     button.addEventListener('mouseleave', toggleIconStyleOnMouseEvents);
     button.addEventListener('click', () => this.draw());
+    html;
 
     return button;
   }
@@ -132,7 +133,7 @@ export default class TaskForm {
     cancelBtn.setAttribute('type', 'button');
     cancelBtn.textContent = 'Cancel';
 
-    cancelBtn.addEventListener('click', this.closeForm);
+    cancelBtn.addEventListener('click', this.closeForm.bind(this));
 
     return cancelBtn;
   }
