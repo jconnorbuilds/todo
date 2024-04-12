@@ -46,7 +46,6 @@ export default class TaskForm {
     button.addEventListener('mouseenter', toggleIconStyleOnMouseEvents);
     button.addEventListener('mouseleave', toggleIconStyleOnMouseEvents);
     button.addEventListener('click', () => this.draw());
-    html;
 
     return button;
   }

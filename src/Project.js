@@ -1,4 +1,3 @@
-import DOMDrawProject from './DOM-project.js';
 import Section from './Section.js';
 import { slugify } from './utils.js';
 
@@ -72,7 +71,22 @@ export default class Project {
 
   // Instance methods and props
   draw() {
-    DOMDrawProject(this);
+    const projectsArea = document.querySelector('.sidebar__projects-list');
+    const projectLi = document.createElement('li');
+    projectLi.classList = 'sidebar__project';
+    projectLi.dataset.id = this.id;
+    projectLi.innerHTML = `
+    <button>
+    <i class="fa-solid fa-hashtag"></i>
+    <span>${this.name}</span>
+    </button>
+    `;
+
+    projectLi.addEventListener('click', () => {
+      this.isActive = true;
+    });
+
+    projectsArea.append(projectLi);
   }
 
   addSection(sectionName) {

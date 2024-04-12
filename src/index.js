@@ -18,4 +18,7 @@ defaultProject.isActive = true;
 const anotherProject = new Project('Second Project');
 anotherProject.draw();
 
+const thirdProject = new Project('Third Project');
+thirdProject.draw();
+
 console.log(Project.allProjects);
