@@ -1,4 +1,4 @@
-import { createTask } from './Task.js';
+import Task from './Task.js';
 import { toggleIconStyleOnMouseEvents } from './DOM-task-form.js';
 import PriorityButton from './priorityBtnComponent.js';
 
@@ -166,7 +166,9 @@ export default class TaskForm {
     e.preventDefault();
 
     // Create the new task
-    const newTask = createTask(this.section, formData).draw();
+    // const newTask = createTask(this.section, formData).draw();
+    const newTask = new Task(this.section, formData);
+    newTask.draw();
 
     // Reset the form
     this.reset();

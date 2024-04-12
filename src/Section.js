@@ -3,6 +3,7 @@ import TaskForm from './TaskForm.js';
 import { slugify } from './utils.js';
 
 export default class Section {
+  tasks = [];
   constructor(name, project) {
     this.name = name;
     this.slug = slugify(name);
@@ -17,8 +18,12 @@ export default class Section {
     return document.querySelector(this.taskContainerSelector);
   }
 
+  addTask(item) {
+    this.tasks.push(item);
+  }
+
   draw(parentContainer = this.parentContainer) {
     parentContainer.append(DOMSection(this));
-    // this.taskForm.draw();
+    this.tasks.forEach((task) => task.draw());
   }
 }

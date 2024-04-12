@@ -4,7 +4,6 @@ import { slugify } from './utils.js';
 export default class Project {
   static #_uniqueId = 0;
   name;
-  todoItems = [];
   sections;
   #isActive = false;
   static #defaultProject;
@@ -35,15 +34,6 @@ export default class Project {
   static get defaultProject() {
     return this.allProjects[0];
   }
-
-  // static get activeProject() {
-  //   return this.#activeProject;
-  // }
-
-  // static set activeProject(Project) {
-  //   this.allProjects.forEach((project) => project.isActive = false)
-  //   this.#activeProject = Project;
-  // }
 
   static getProjectInstance(name) {
     const desiredProject = Project.allProjects.filter(
@@ -92,27 +82,40 @@ export default class Project {
   addSection(sectionName) {
     const newSection = new Section(sectionName, this);
     this.sections.push(newSection);
-    newSection.draw();
+    // newSection.draw();
   }
 
-  appendTodoItem(item, section = 'default') {
-    this.todoItems.push(item);
+  getTasks() {
+    const tasks = {};
+    this.sections.forEach((section) => {
+      const sectionTasks = [];
+      section.tasks.forEach((task) => sectionTasks.push(task));
+      tasks[section.name] = sectionTasks;
+    });
+    return tasks;
   }
-  logTodoItems() {
-    console.log(this.todoItems);
-  }
+
+  static getAllTasks() {}
+
   logSections() {
     for (let s of this.sections) console.log(s.name);
   }
+
   updateUI() {
     // Update styles for the sidebar project list
     const projects = document.querySelectorAll('.sidebar__project');
-    console.log(projects);
     projects.forEach((project) => {
       +project.dataset.id === this.id
         ? this.#toggleActiveClass(project, true)
         : this.#toggleActiveClass(project, false);
     });
+
+    // Update the main UI (draw the sections for the active project)
+    document
+      .querySelectorAll('.section-container')
+      ?.forEach((section) => section.remove());
+
+    this.sections.forEach((section) => section.draw());
   }
 
   #toggleActiveClass(element, isActive) {

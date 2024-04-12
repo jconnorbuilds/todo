@@ -16,6 +16,9 @@ export default class Task {
     this.priority = data.priority;
     this.dueDate = data.dueDate;
     this.id = Task.uniqueId;
+
+    this.section.addTask(this);
+    console.log(this.section.project.getTasks());
   }
 
   static get uniqueId() {
@@ -60,16 +63,3 @@ export default class Task {
     );
   }
 }
-
-const createTask = (
-  taskTitle,
-  taskDescription = '',
-  project = Project.defaultProject
-) => {
-  const task = new Task(taskTitle, taskDescription);
-  project.appendTodoItem(task);
-  project.logTodoItems();
-  return task;
-};
-
-export { createTask };
