@@ -3,6 +3,7 @@ import { toggleIconStyleOnMouseEvents } from './DOM-task-form.js';
 import PriorityButton from './priorityBtnComponent.js';
 
 export default class TaskForm {
+  #isHidden;
   constructor(section) {
     this.section = section;
     this.project = section.project;
@@ -23,13 +24,26 @@ export default class TaskForm {
     this.form.reset();
     this.priorityButton.reset();
     this.toggleEnabledDisabledSubmitButton();
-    this.form.querySelector('input').focus();
+    if (!this.isHidden) this.form.querySelector('input').focus();
   }
 
   closeForm() {
     this.form.remove();
     this.reset();
-    this.addTaskBtn.style.display = 'block';
+    this.showAddTaskButton();
+    this.isHidden = true;
+  }
+
+  showAddTaskButton() {
+    this.addTaskBtn.style.display = 'grid';
+  }
+
+  get isHidden() {
+    return this.#isHidden;
+  }
+
+  set isHidden(hidden) {
+    this.#isHidden = hidden;
   }
 
   makeAddTaskBtn() {
@@ -57,6 +71,8 @@ export default class TaskForm {
     const container = this.parentContainer || document.body;
     container.appendChild(form);
     form.querySelector('input').focus();
+
+    this.isHidden = false;
   }
 
   makeForm() {
@@ -77,7 +93,7 @@ export default class TaskForm {
     footer.classList.add('task-form-footer__');
     const projectSelect = document.createElement('div');
     projectSelect.classList.add('task-form-footer__project-selector');
-    projectSelect.textContent = 'Home';
+    projectSelect.textContent = this.project.name;
     const footerButtons = document.createElement('div');
     footerButtons.classList.add('task-form-footer__buttons');
 
@@ -166,7 +182,6 @@ export default class TaskForm {
     e.preventDefault();
 
     // Create the new task
-    // const newTask = createTask(this.section, formData).draw();
     const newTask = new Task(this.section, formData);
     newTask.draw();
 

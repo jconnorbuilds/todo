@@ -42,13 +42,12 @@ export default class Task {
 
   draw() {
     const taskContainer = this.section.taskContainer;
-    const FOR_ID = `task-${this.id}`;
     const newItem = document.createElement('div');
     newItem.classList = 'todo-item__';
 
     newItem.innerHTML = `
     <div class="todo-item__checkbox">
-    <input class="p${this.priority}" type="checkbox" id="${FOR_ID}">
+    <input class="p${this.priority}" type="checkbox">
     <span class="checkmark"</span>
     </div>
     <div class="todo-item__todo-info">

@@ -7,7 +7,7 @@ export default class Project {
   sections;
   #isActive = false;
   static #defaultProject;
-  // static #activeProject;
+  static currentProject;
   static #allProjects = [];
   constructor(name) {
     this.id = Project.uniqueId;
@@ -16,9 +16,9 @@ export default class Project {
     this.sections = [];
     this.addSection('Default');
     Project.allProjects.push(this);
+    this.draw();
   }
 
-  // Static methods and props
   static get uniqueId() {
     return this.#_uniqueId++;
   }
@@ -50,8 +50,10 @@ export default class Project {
   set isActive(active) {
     if (active) {
       Project.allProjects.forEach((project) => (project.#isActive = false));
+      Project.currentProject = this;
     }
     this.#isActive = active;
+
     this.updateUI();
   }
 
@@ -59,7 +61,6 @@ export default class Project {
     return this.#isActive;
   }
 
-  // Instance methods and props
   draw() {
     const projectsArea = document.querySelector('.sidebar__projects-list');
     const projectLi = document.createElement('li');
@@ -82,7 +83,6 @@ export default class Project {
   addSection(sectionName) {
     const newSection = new Section(sectionName, this);
     this.sections.push(newSection);
-    // newSection.draw();
   }
 
   getTasks() {
@@ -110,15 +110,28 @@ export default class Project {
         : this.#toggleActiveClass(project, false);
     });
 
-    // Update the main UI (draw the sections for the active project)
+    // Update project title
+    document.querySelector('.project-title').textContent = this.name;
+
+    // Clear all project sections from the main window
     document
       .querySelectorAll('.section-container')
       ?.forEach((section) => section.remove());
 
-    this.sections.forEach((section) => section.draw());
+    // Make sure the "Add Task" button is showing
+    this.sections.forEach((section) => {
+      section.taskForm.closeForm();
+    });
+
+    // Draw project sections
+    this.drawSections();
   }
 
   #toggleActiveClass(element, isActive) {
     element.classList.toggle('active', isActive);
+  }
+
+  drawSections() {
+    this.sections.forEach((section) => section.draw());
   }
 }

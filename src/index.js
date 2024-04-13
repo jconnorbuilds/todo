@@ -11,14 +11,9 @@ window.addEventListener('keydown', (e) => {
 });
 
 const defaultProject = new Project('Home');
-Project.currentProject = defaultProject;
-defaultProject.draw();
 defaultProject.isActive = true;
 
-const anotherProject = new Project('Second Project');
-anotherProject.draw();
-
-const thirdProject = new Project('Third Project');
-thirdProject.draw();
+new Project('Second Project');
+new Project('Third Project');
 
 console.log(Project.allProjects);

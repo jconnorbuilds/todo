@@ -101,11 +101,31 @@ div.gentle-btn {
 
 .todo-item__checkbox {
   font-size: 2rem;
-  font-weight: bold;
-  line-height: 1.1;
   display: grid;
   grid-template-columns: 1em auto;
-  /* gap: 0.5em; */
+}
+
+button.add-todo {
+  display: grid;
+  grid-template-columns: 1em auto;
+  text-align: start;
+  color: var(--secondary-font-color);
+  background-color: var(--main-bg-color);
+  padding: 0;
+  border: none;
+}
+
+button.add-todo i {
+  font-size: 1.4em;
+}
+
+button.add-todo span {
+  font-size: 1em;
+}
+
+button.add-todo:hover {
+  color: var(--highlight-color);
+  background-color: inherit;
 }
 
 body {
@@ -225,23 +245,6 @@ div.main-window {
 
 div.main-window h1 {
   padding-bottom: 0.5em;
-}
-
-div.main-window button.add-todo {
-  text-align: start;
-  color: var(--secondary-font-color);
-  background-color: var(--main-bg-color);
-  padding: 0;
-  border: none;
-}
-
-button.add-todo i {
-  padding-right: 0.6em;
-  font-size: 1.15em;
-}
-
-div.main-window button.add-todo:hover {
-  color: var(--highlight-color);
 }
 
 div.main-window section.section-container {
