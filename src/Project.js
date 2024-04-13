@@ -118,13 +118,11 @@ export default class Project {
       .querySelectorAll('.section-container')
       ?.forEach((section) => section.remove());
 
-    // Make sure the "Add Task" button is showing
-    this.sections.forEach((section) => {
-      section.taskForm.closeForm();
-    });
-
     // Draw project sections
     this.drawSections();
+
+    // Make sure the "Add Task" button is showing
+    this.sections.forEach((section) => section.taskForm.showAddTaskButton());
   }
 
   #toggleActiveClass(element, isActive) {
