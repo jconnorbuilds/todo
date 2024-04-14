@@ -9,7 +9,7 @@ export default class TaskForm {
     this.section = section;
     this.project = section.project;
     this.priorityButton = new PriorityButton(this);
-    this.dueDate = new DueDate(this);
+    this.dueDate = new DueDate();
     this.addTaskBtn = this.makeAddTaskBtn();
     this.submitButton = this.#makeSubmitButton();
     this.taskNameField = this.#makeTaskNameField();
@@ -126,7 +126,7 @@ export default class TaskForm {
         title: taskNameField.value,
         description: descriptionField.value,
         priority: +priorityButton.dataset.priority,
-        dueDate: this.dueDate.date,
+        dueDate: this.dueDate,
       };
       this.taskFormSubmitHandler(e, formData);
     });
@@ -188,7 +188,6 @@ export default class TaskForm {
     // Create the new task
     const newTask = new Task(this.section, formData);
     newTask.draw();
-    console.log(newTask.dueDate);
 
     // Reset the form
     this.reset();

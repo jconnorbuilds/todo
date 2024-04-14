@@ -2,15 +2,13 @@ import { Temporal } from '@js-temporal/polyfill';
 import AirDatepicker from 'air-datepicker';
 import 'air-datepicker/air-datepicker.css';
 import localeJp from 'air-datepicker/locale/ja';
-const FA_ICON_CLASSES = 'fa-solid fa-calendar-days';
+export const FA_ICON_CLASSES = 'fa-solid fa-calendar-days';
 
 export default class DueDate {
   #date;
-  constructor(taskForm, date = Temporal.Now.plainDateISO()) {
+  constructor(date = Temporal.Now.plainDateISO()) {
     this.#date = date;
-    this.taskForm = taskForm;
     this.button = this.draw();
-    console.log(this.date);
   }
 
   set date(newDate) {
@@ -34,7 +32,16 @@ export default class DueDate {
     new AirDatepicker(dueDateButton.querySelector('input'), {
       locale: localeJp,
       selectedDates: [this.date.toString()],
-      onSelect: (date) => (this.date = date),
+      // convert Date object to Temporal object and update this.date
+      onSelect: (dateObj) => {
+        const temporalDate = Temporal.Instant.fromEpochMilliseconds(
+          dateObj.date.getTime()
+        )
+          .toZonedDateTimeISO(Temporal.Now.timeZoneId())
+          .toPlainDate();
+
+        this.date = temporalDate;
+      },
       autoClose: true,
     });
 

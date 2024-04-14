@@ -1,4 +1,5 @@
-import Project from './Project.js';
+import { Temporal } from '@js-temporal/polyfill';
+import { FA_ICON_CLASSES } from './dueDateButtonComponent.js';
 
 export default class Task {
   static #_uniqueId = 0;
@@ -51,8 +52,12 @@ export default class Task {
     <span class="checkmark"</span>
     </div>
     <div class="todo-item__todo-info">
-    <div class="todo-item__main-title">${this.title}</div>
-    <div class="todo-item__description">${this.description}</div>
+      <div class="todo-item__main-title">${this.title}</div>
+        <div class="todo-item__description">${this.description}</div>
+        <div class="todo-item__due-date">
+        <i class='${FA_ICON_CLASSES} on-time'></i>
+        <span>${this.getDueDateDisplay()}</span>
+      </div>
     </div>
     `;
 
@@ -61,4 +66,33 @@ export default class Task {
       taskContainer.querySelector('div.new-todo-wrapper')
     );
   }
+
+  getDueDateDisplay() {
+    const daysUntilDue = this.getDaysUntilDue(this.dueDate);
+    console.log(daysUntilDue);
+    const daysList = [
+      '_',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
+    if (daysUntilDue == 0) {
+      return 'Today';
+    } else if (daysUntilDue == 1) {
+      return 'Tomorrow';
+    } else if (daysUntilDue < 7) {
+      return daysList[daysUntilDue];
+    } else {
+      return this.dueDate.date;
+    }
+  }
+  getDaysUntilDue = (dueDate) => {
+    const today = Temporal.Now.plainDateISO();
+    const until = today.until(dueDate.date);
+    return until.days;
+  };
 }

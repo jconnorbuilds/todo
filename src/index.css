@@ -289,6 +289,11 @@ section.section-container > * {
   color: var(--secondary-font-color);
 }
 
+.todo-item__due-date {
+  font-size: 0.9em;
+  color: var(--secondary-font-color);
+}
+
 form.task-form {
   display: grid;
   grid-template-rows: 1fr;
