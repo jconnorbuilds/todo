@@ -1,6 +1,7 @@
 import Task from './Task.js';
 import { toggleIconStyleOnMouseEvents } from './DOM-task-form.js';
 import PriorityButton from './priorityBtnComponent.js';
+import DueDate from './dueDateButtonComponent.js';
 
 export default class TaskForm {
   #isHidden;
@@ -8,6 +9,7 @@ export default class TaskForm {
     this.section = section;
     this.project = section.project;
     this.priorityButton = new PriorityButton(this);
+    this.dueDate = new DueDate(this);
     this.addTaskBtn = this.makeAddTaskBtn();
     this.submitButton = this.#makeSubmitButton();
     this.taskNameField = this.#makeTaskNameField();
@@ -102,8 +104,10 @@ export default class TaskForm {
     const cancelBtn = this.#makeCancelBtn();
 
     // Build the form
-    const priorityBtn = this.priorityButton.button;
-    detailsArea.append(priorityBtn);
+    const priorityButton = this.priorityButton.button;
+    const dueDateButton = this.dueDate.button;
+    detailsArea.append(priorityButton);
+    detailsArea.append(dueDateButton);
     editingArea.append(taskNameField);
     editingArea.append(descriptionField);
     editingArea.append(detailsArea);
@@ -121,8 +125,8 @@ export default class TaskForm {
       const formData = {
         title: taskNameField.value,
         description: descriptionField.value,
-        priority: +priorityBtn.dataset.priority,
-        dueDate: 'Today', // placeholder
+        priority: +priorityButton.dataset.priority,
+        dueDate: this.dueDate.date,
       };
       this.taskFormSubmitHandler(e, formData);
     });
@@ -184,6 +188,7 @@ export default class TaskForm {
     // Create the new task
     const newTask = new Task(this.section, formData);
     newTask.draw();
+    console.log(newTask.dueDate);
 
     // Reset the form
     this.reset();

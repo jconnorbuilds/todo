@@ -2,7 +2,7 @@
 
 :root {
   --main-bg-color: rgb(255, 255, 255);
-  --sidebar-color: rgb(248, 246, 240);
+  --sidebar-bg-color: rgb(248, 246, 240);
   --primary-font-color: black;
   --secondary-font-color: rgb(93, 93, 93);
   --highlight-color: #d74057;
@@ -148,7 +148,7 @@ button:hover {
   background-color: #ddd;
 }
 
-div.gentle-btn {
+button.gentle {
   border: 1px solid #ccc;
   background-color: inherit;
   width: max-content;
@@ -156,7 +156,24 @@ div.gentle-btn {
   font-size: 0.9em;
 }
 
-div.gentle-btn:hover {
+.priority-btn--expanded .priority-btn__level-btn {
+  padding: 4px 8px;
+  border: none;
+}
+
+.priority-btn__.priority-btn--expanded:hover {
+  background-color: inherit;
+}
+
+.priority-btn--expanded .priority-btn__level-btn:hover {
+  background-color: #eee;
+}
+
+.priority-btn__level-buttons-container {
+  display: flex;
+}
+
+button.gentle:hover {
   background-color: #eee;
 }
 
@@ -176,7 +193,7 @@ div.container {
 }
 
 .sidebar__ {
-  background-color: var(--sidebar-color);
+  background-color: var(--sidebar-bg-color);
 }
 
 .sidebar__ > * {
@@ -288,14 +305,27 @@ form.task-form input {
   outline: none;
 }
 
-.task-details-area__ {
-  padding: 0.9em 0 0 0;
+.task-editing-area__ input[type='text'] {
+  width: 100%;
+  border: none;
 }
 
-.task-details-area__ div.gentle-btn {
+.task-details-area__ input[type='text'] {
+  width: 10ch;
+}
+
+/* .due-date-btn__ {
+  width: 110px;
+} */
+
+form.task-form input[type='text']:first-child {
+  font-weight: 500;
+}
+
+.task-details-area__ {
   display: flex;
-  align-items: center;
-  gap: 3px;
+  gap: 0.5em;
+  padding: 0.9em 0 0 0;
 }
 
 .task-form-footer__buttons {
@@ -322,16 +352,6 @@ form.task-form input {
 
 .task-form-footer__project-selector:hover {
   background-color: #eee;
-}
-
-form.task-form input[type='text'] {
-  display: grid;
-  width: 100%;
-  border: none;
-}
-
-form.task-form input[type='text']:first-child {
-  font-weight: 500;
 }
 
 .task-form-footer__ {
@@ -362,14 +382,8 @@ form.task-form input[type='text']:first-child {
   color: var(--priority-urgent);
 }
 
-.priority-btn--expanded .priority-btn__level-btn {
-  padding: 0 8px;
-  border-radius: 4px;
-}
-
-.priority-btn__.priority-btn--expanded:hover {
+.due-date-btn__date-input {
+  /* display: flex; */
   background-color: inherit;
-}
-.priority-btn--expanded .priority-btn__level-btn:hover {
-  background-color: #eee;
+  cursor: pointer;
 }

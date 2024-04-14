@@ -4,15 +4,16 @@ const PRIORITY_LEVEL_BUTTON_CLASS = 'priority-btn__level-btn';
 const BUTTON_CONTAINER_CLASS = 'priority-btn__level-buttons-container';
 
 export default class PriorityButton {
-  constructor(form, priorityLevel = 4) {
-    this.form = form;
+  constructor(taskForm, priorityLevel = 4) {
+    this.taskForm = taskForm;
     this.priorityLevel = priorityLevel;
-    this.button = this.createButton();
+    this.button = this.draw();
   }
 
-  createButton() {
-    const priorityBtn = document.createElement('div');
-    priorityBtn.className = 'priority-btn__ gentle-btn';
+  draw() {
+    const priorityBtn = document.createElement('button');
+    priorityBtn.setAttribute('type', 'button');
+    priorityBtn.className = 'priority-btn__ gentle';
     priorityBtn.setAttribute('tabindex', '0');
     priorityBtn.dataset.priority = this.priorityLevel;
     priorityBtn.innerHTML = `
@@ -29,13 +30,16 @@ export default class PriorityButton {
     const btn = this.button;
     const priorityIconSelectors = `.${PRIORITY_LEVEL_BUTTON_CLASS} i, .${PRIORITY_LEVEL_BUTTON_CLASS}`;
 
+    // If a new priority level is selected, collapse button and set new priority level
     if (e.target.matches(priorityIconSelectors)) {
       this.updateTaskPriority(e.target);
       this.toggleButtonExpansion(false);
       this.focusForm();
+      // Otherwise if button is clicked while expanded, collapse button
     } else if (btn.classList.contains('priority-btn--expanded')) {
       this.toggleButtonExpansion(false);
     } else {
+      // Else if button is closed, expand the button
       this.toggleButtonExpansion(true);
     }
   }
@@ -69,15 +73,10 @@ export default class PriorityButton {
     const priorityLevelButtonsContainer = document.createElement('div');
     priorityLevelButtonsContainer.classList = BUTTON_CONTAINER_CLASS;
     PRIORITY_LEVELS.forEach((level) => {
-      const priorityLevelButton = document.createElement('span');
-      priorityLevelButton.classList.add(
-        `${PRIORITY_LEVEL_BUTTON_CLASS}`,
-        'gentle-btn'
-      );
-      priorityLevelButton.dataset.priority = level;
-      priorityLevelButton.innerHTML = `<i class="${FA_ICON_CLASSES} p${level}"></i>`;
-
-      priorityLevelButtonsContainer.append(priorityLevelButton);
+      priorityLevelButtonsContainer.innerHTML += `
+      <button class="${PRIORITY_LEVEL_BUTTON_CLASS} gentle" data-priority=${level}>
+      <i class="${FA_ICON_CLASSES} p${level}"></i>
+      `;
     });
     this.button.append(priorityLevelButtonsContainer);
   }
@@ -98,8 +97,8 @@ export default class PriorityButton {
    * focuses the submit button so the user can press Enter to submit the form.
    */
   focusForm() {
-    const formTaskTitleField = this.form.form.querySelector('input');
-    const formSubmitButton = this.form.form.querySelector(
+    const formTaskTitleField = this.taskForm.form.querySelector('input');
+    const formSubmitButton = this.taskForm.form.querySelector(
       'button[type="submit"]'
     );
     formTaskTitleField.value !== ''
