@@ -24,8 +24,11 @@ export default class TaskForm {
 
   reset() {
     this.form.reset();
-    this.priorityButton.reset();
+    // this.draw();
+    this.dueDate.reset();
     this.toggleEnabledDisabledSubmitButton();
+
+    // Focus the main input after form refreshes
     if (!this.isHidden) this.form.querySelector('input').focus();
   }
 
@@ -105,7 +108,7 @@ export default class TaskForm {
 
     // Build the form
     const priorityButton = this.priorityButton.button;
-    const dueDateButton = this.dueDate.button;
+    const dueDateButton = this.dueDate.draw();
     detailsArea.append(priorityButton);
     detailsArea.append(dueDateButton);
     editingArea.append(taskNameField);

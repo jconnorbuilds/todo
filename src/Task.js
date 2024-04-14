@@ -44,6 +44,7 @@ export default class Task {
   draw() {
     const taskContainer = this.section.taskContainer;
     const newItem = document.createElement('div');
+    const dateDisplay = this.getDueDateDisplay();
     newItem.classList = 'todo-item__';
 
     newItem.innerHTML = `
@@ -54,9 +55,9 @@ export default class Task {
     <div class="todo-item__todo-info">
       <div class="todo-item__main-title">${this.title}</div>
         <div class="todo-item__description">${this.description}</div>
-        <div class="todo-item__due-date">
-        <i class='${FA_ICON_CLASSES} on-time'></i>
-        <span>${this.getDueDateDisplay()}</span>
+        <div class="todo-item__due-date ${dateDisplay.timelyClass}">
+        <i class="${FA_ICON_CLASSES}"></i>
+        <span>${dateDisplay.dueDateString}</span>
       </div>
     </div>
     `;
@@ -69,7 +70,7 @@ export default class Task {
 
   getDueDateDisplay() {
     const daysUntilDue = this.getDaysUntilDue(this.dueDate);
-    console.log(daysUntilDue);
+    const result = { dueDateString: '', timelyClass: '' };
     const daysList = [
       '_',
       'Monday',
@@ -80,19 +81,31 @@ export default class Task {
       'Saturday',
       'Sunday',
     ];
-    if (daysUntilDue == 0) {
-      return 'Today';
-    } else if (daysUntilDue == 1) {
-      return 'Tomorrow';
-    } else if (daysUntilDue < 7) {
-      return daysList[daysUntilDue];
+    if (daysUntilDue >= 0) {
+      result.timelyClass = 'on-time';
+      result.dueDateString =
+        daysUntilDue == 0
+          ? 'Today'
+          : daysUntilDue == 1
+          ? 'Tomorrow'
+          : daysUntilDue < 7
+          ? daysList[daysUntilDue]
+          : this.dueDate.date;
     } else {
-      return this.dueDate.date;
+      result.timelyClass = 'overdue';
+      result.dueDateString =
+        daysUntilDue == -1 ? 'Yesterday' : this.dueDate.date;
     }
+    return result;
   }
-  getDaysUntilDue = (dueDate) => {
+
+  getDaysUntilDue(dueDate) {
     const today = Temporal.Now.plainDateISO();
     const until = today.until(dueDate.date);
     return until.days;
-  };
+  }
+
+  getTimelyClass() {
+    const daysUntilDue = this.getDaysUntilDue(this.dueDate);
+  }
 }

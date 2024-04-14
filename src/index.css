@@ -290,8 +290,22 @@ section.section-container > * {
 }
 
 .todo-item__due-date {
+  display: flex;
+  gap: 0.5em;
   font-size: 0.9em;
   color: var(--secondary-font-color);
+}
+
+.todo-item__due-date.on-time {
+  color: rgb(137, 34, 137);
+}
+
+.todo-item__due-date.overdue {
+  color: rgb(179, 0, 0);
+}
+
+.todo-item__due-date.completed {
+  color: rgb(0, 184, 18);
 }
 
 form.task-form {
