@@ -7,8 +7,6 @@
  */
 export const toggleIconStyleOnMouseEvents = (e) => {
   const icon = e.target.querySelector('i');
-  if (icon) {
-    icon.classList.toggle('fa-solid');
-    icon.classList.toggle('fa-regular');
-  }
+  icon?.classList.toggle('fa-solid');
+  icon?.classList.toggle('fa-regular');
 };
