@@ -1,5 +1,6 @@
 import { Temporal } from '@js-temporal/polyfill';
 import { FA_ICON_CLASSES } from './dueDateButtonComponent.js';
+import { differenceInCalendarDays } from 'date-fns';
 
 export default class Task {
   static #_uniqueId = 0;
@@ -10,16 +11,15 @@ export default class Task {
   _isDeleted = false;
   _isCompleted = false;
 
-  constructor(section, data) {
-    this.section = section;
+  constructor(data) {
+    // this.section = section;
     this.title = data.title;
     this.description = data.description;
     this.priority = data.priority;
-    this.dueDate = data.dueDate;
+    this.dueDate = data.dueDate.date;
     this.id = Task.uniqueId;
-
-    this.section.addTask(this);
-    console.log(this.section.project.getTasks());
+    // this.section.addTask(this);
+    // this.saveTask(this);
   }
 
   static get uniqueId() {
@@ -41,8 +41,8 @@ export default class Task {
     this._isCompleted = bool;
   }
 
-  draw() {
-    const taskContainer = this.section.taskContainer;
+  draw(renderTarget) {
+    const taskContainer = renderTarget;
     const newItem = document.createElement('div');
     const dateDisplay = this.getDueDateDisplay();
     newItem.classList = 'todo-item__';
@@ -70,6 +70,7 @@ export default class Task {
 
   getDueDateDisplay() {
     const daysUntilDue = this.getDaysUntilDue(this.dueDate);
+    console.log(daysUntilDue);
     const result = { dueDateString: '', timelyClass: '' };
     const daysList = [
       '_',
@@ -90,22 +91,22 @@ export default class Task {
           ? 'Tomorrow'
           : daysUntilDue < 7
           ? daysList[daysUntilDue]
-          : this.dueDate.date;
+          : this.dueDate.toLocaleDateString();
     } else {
       result.timelyClass = 'overdue';
       result.dueDateString =
-        daysUntilDue == -1 ? 'Yesterday' : this.dueDate.date;
+        daysUntilDue == -1 ? 'Yesterday' : this.dueDate.toLocaleDateString();
     }
     return result;
   }
 
   getDaysUntilDue(dueDate) {
-    const today = Temporal.Now.plainDateISO();
-    const until = today.until(dueDate.date);
-    return until.days;
+    const daysUntilDue = differenceInCalendarDays(dueDate, new Date());
+    return daysUntilDue;
   }
 
-  getTimelyClass() {
-    const daysUntilDue = this.getDaysUntilDue(this.dueDate);
-  }
+  // saveTask(task) {
+  //   localStorage.setItem(`task-${task.id}`, JSON.stringify(task));
+  //   console.log(localStorage.getItem(`task-${task.id}`));
+  // }
 }

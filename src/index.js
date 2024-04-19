@@ -15,5 +15,3 @@ defaultProject.isActive = true;
 
 new Project('Second Project');
 new Project('Third Project');
-
-console.log(Project.allProjects);

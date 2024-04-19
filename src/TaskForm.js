@@ -189,8 +189,8 @@ export default class TaskForm {
     e.preventDefault();
 
     // Create the new task
-    const newTask = new Task(this.section, formData);
-    newTask.draw();
+    const newTask = new Task(formData);
+    newTask.draw(e.target.closest('.section-container'));
 
     // Reset the form
     this.reset();
