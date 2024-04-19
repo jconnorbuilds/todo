@@ -1,5 +1,6 @@
 import './index.css';
 import Project from './Project';
+import Task from './Task.js';
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -15,3 +16,9 @@ defaultProject.isActive = true;
 
 new Project('Second Project');
 new Project('Third Project');
+
+Task.loadTasks();
+
+// Object.keys(localStorage).forEach((key) => {
+//   localStorage.removeItem(key);
+// });

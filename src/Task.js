@@ -1,9 +1,9 @@
-import { Temporal } from '@js-temporal/polyfill';
+import Section from './Section.js';
 import { FA_ICON_CLASSES } from './dueDateButtonComponent.js';
 import { differenceInCalendarDays } from 'date-fns';
 
 export default class Task {
-  static #_uniqueId = 0;
+  static #_id = 0;
   title;
   description;
   priority;
@@ -12,18 +12,39 @@ export default class Task {
   _isCompleted = false;
 
   constructor(data) {
-    // this.section = section;
     this.title = data.title;
     this.description = data.description;
     this.priority = data.priority;
-    this.dueDate = data.dueDate.date;
-    this.id = Task.uniqueId;
-    // this.section.addTask(this);
-    // this.saveTask(this);
+    this.dueDate = data.dueDate;
+    this.id = Task.getId(data);
+    this.sectionId = data.sectionId;
+    this.saveTask(this);
   }
 
-  static get uniqueId() {
-    return this.#_uniqueId++;
+  static getId(data) {
+    if (data.id) {
+      this.#_id++;
+      return data.id;
+    }
+    return this.#_id++;
+  }
+
+  static loadTasks() {
+    let tasksToLoad = [];
+    Object.entries(localStorage).forEach(([key, value]) => {
+      console.log(key, value);
+      if (key.slice(0, 5) === 'task-') {
+        const loadedTask = new Task(JSON.parse(value));
+        // console.log(loadedTask);
+        tasksToLoad.push(loadedTask);
+      }
+    });
+    console.log(tasksToLoad);
+    tasksToLoad.forEach((task) => {
+      const taskContainer = task.getSection().taskContainer;
+      task.draw(taskContainer);
+    });
+    return tasksToLoad;
   }
 
   get isDeleted() {
@@ -41,7 +62,13 @@ export default class Task {
     this._isCompleted = bool;
   }
 
-  draw(renderTarget) {
+  getSection(id = this.sectionId) {
+    let instance = Section.getInstance(id);
+    console.log(instance);
+    return instance;
+  }
+
+  draw(renderTarget = document.querySelector('.section-container.default')) {
     const taskContainer = renderTarget;
     const newItem = document.createElement('div');
     const dateDisplay = this.getDueDateDisplay();
@@ -70,7 +97,6 @@ export default class Task {
 
   getDueDateDisplay() {
     const daysUntilDue = this.getDaysUntilDue(this.dueDate);
-    console.log(daysUntilDue);
     const result = { dueDateString: '', timelyClass: '' };
     const daysList = [
       '_',
@@ -91,11 +117,13 @@ export default class Task {
           ? 'Tomorrow'
           : daysUntilDue < 7
           ? daysList[daysUntilDue]
-          : this.dueDate.toLocaleDateString();
+          : new Date(this.dueDate).toLocaleDateString();
     } else {
       result.timelyClass = 'overdue';
       result.dueDateString =
-        daysUntilDue == -1 ? 'Yesterday' : this.dueDate.toLocaleDateString();
+        daysUntilDue == -1
+          ? 'Yesterday'
+          : new Date(this.dueDate).toLocaleDateString();
     }
     return result;
   }
@@ -105,8 +133,8 @@ export default class Task {
     return daysUntilDue;
   }
 
-  // saveTask(task) {
-  //   localStorage.setItem(`task-${task.id}`, JSON.stringify(task));
-  //   console.log(localStorage.getItem(`task-${task.id}`));
-  // }
+  saveTask(task) {
+    localStorage.setItem(`task-${task.id}`, JSON.stringify(task));
+    console.log({ localStorage });
+  }
 }

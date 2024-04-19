@@ -124,13 +124,16 @@ export default class TaskForm {
     form.append(footer);
 
     // Add event listeners
+    console.log(this.section.id);
     form.addEventListener('submit', (e) => {
       const formData = {
         title: taskNameField.value,
         description: descriptionField.value,
         priority: +priorityButton.dataset.priority,
-        dueDate: this.dueDate,
+        dueDate: this.dueDate.date,
+        sectionId: this.section.id,
       };
+
       this.taskFormSubmitHandler(e, formData);
     });
 
