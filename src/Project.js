@@ -2,25 +2,40 @@ import Section from './Section.js';
 import { slugify } from './utils.js';
 
 export default class Project {
-  static #_uniqueId = 0;
+  static #_id = 0;
   name;
-  sections;
   #isActive = false;
   static #defaultProject;
   static currentProject;
   static #allProjects = [];
-  constructor(name) {
-    this.id = Project.uniqueId;
-    this.name = name;
-    this.slug = slugify(name);
+  constructor(data) {
+    if (typeof data == 'string') {
+      this.id = Project.id;
+      this.name = data;
+    } else {
+      this.id = data.id;
+      this.name = data.name;
+    }
+    this.slug = slugify(this.name);
     this.sections = [];
-    this.addSection('Default');
     Project.allProjects.push(this);
-    this.draw();
+    Project.saveProjects();
   }
 
-  static get uniqueId() {
-    return this.#_uniqueId++;
+  static loadProjects() {
+    let loadedProjects = JSON.parse(localStorage.getItem('projects'));
+    loadedProjects?.forEach((project) => new Project(project).draw());
+
+    return loadedProjects;
+  }
+
+  static saveProjects() {
+    localStorage.setItem('projects', JSON.stringify(Project.allProjects));
+    console.log(localStorage['projects']);
+  }
+
+  static get id() {
+    return this.#_id++;
   }
 
   static get allProjects() {
@@ -28,23 +43,16 @@ export default class Project {
   }
 
   static get defaultProject() {
-    return this.#defaultProject;
-  }
-
-  static get defaultProject() {
     return this.allProjects[0];
   }
 
-  static getProjectInstance(name) {
-    const desiredProject = Project.allProjects.filter(
-      (p) => p.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (desiredProject.length) {
-      return desiredProject;
-    } else {
-      throw ProjectNotFoundError(`The project "${name}" doesn't exist!`);
+  static getInstance(id) {
+    for (const instance of this.allProjects) {
+      if (instance.id == id) {
+        return instance;
+      }
     }
+    throw new Error(`Project with id ${id} not found!`);
   }
 
   set isActive(active) {
@@ -81,8 +89,13 @@ export default class Project {
   }
 
   addSection(sectionName) {
-    const newSection = new Section(sectionName, this);
+    const newSection = new Section({
+      name: sectionName,
+      projectId: this.id,
+    });
+
     this.sections.push(newSection);
+    newSection.draw();
   }
 
   getTasks() {
@@ -94,8 +107,6 @@ export default class Project {
     });
     return tasks;
   }
-
-  static getAllTasks() {}
 
   logSections() {
     for (let s of this.sections) console.log(s.name);

@@ -31,19 +31,18 @@ export default class Task {
 
   static loadTasks() {
     let tasksToLoad = [];
-    Object.entries(localStorage).forEach(([key, value]) => {
-      console.log(key, value);
-      if (key.slice(0, 5) === 'task-') {
-        const loadedTask = new Task(JSON.parse(value));
-        // console.log(loadedTask);
-        tasksToLoad.push(loadedTask);
-      }
-    });
-    console.log(tasksToLoad);
-    tasksToLoad.forEach((task) => {
-      const taskContainer = task.getSection().taskContainer;
-      task.draw(taskContainer);
-    });
+    // Object.entries(localStorage).forEach(([key, value]) => {
+    //   console.log(key, value);
+    //   if (key.slice(0, 5) === 'task-') {
+    //     const loadedTask = new Task(JSON.parse(value));
+    //     tasksToLoad.push(loadedTask);
+    //   }
+    // });
+    // console.log(tasksToLoad);
+    // tasksToLoad.forEach((task) => {
+    //   const taskContainer = task.getSection().taskContainer;
+    //   task.draw(taskContainer);
+    // });
     return tasksToLoad;
   }
 
@@ -64,7 +63,6 @@ export default class Task {
 
   getSection(id = this.sectionId) {
     let instance = Section.getInstance(id);
-    console.log(instance);
     return instance;
   }
 
@@ -134,7 +132,7 @@ export default class Task {
   }
 
   saveTask(task) {
-    localStorage.setItem(`task-${task.id}`, JSON.stringify(task));
-    console.log({ localStorage });
+    // localStorage.setItem(`task-${task.id}`, JSON.stringify(task));
+    // console.log({ localStorage });
   }
 }

@@ -4,8 +4,7 @@ const PRIORITY_LEVEL_BUTTON_CLASS = 'priority-btn__level-btn';
 const BUTTON_CONTAINER_CLASS = 'priority-btn__level-buttons-container';
 
 export default class PriorityButton {
-  constructor(taskForm, priorityLevel = 4) {
-    this.taskForm = taskForm;
+  constructor(priorityLevel = 4) {
     this.priorityLevel = priorityLevel;
     this.button = this.draw();
   }
@@ -21,36 +20,35 @@ export default class PriorityButton {
     <span>Priority</span>
     `;
 
-    priorityBtn.addEventListener('click', this.handleClick.bind(this));
+    priorityBtn.addEventListener('click', this.#handleClick.bind(this));
 
     return priorityBtn;
   }
 
-  handleClick(e) {
+  #handleClick(e) {
     const btn = this.button;
     const priorityIconSelectors = `.${PRIORITY_LEVEL_BUTTON_CLASS} i, .${PRIORITY_LEVEL_BUTTON_CLASS}`;
-
     // If a new priority level is selected, collapse button and set new priority level
     if (e.target.matches(priorityIconSelectors)) {
-      this.updateTaskPriority(e.target);
-      this.toggleButtonExpansion(false);
-      this.focusForm();
+      this.#updateTaskPriority(e.target);
+      this.#toggleButtonExpansion(false);
+      this.#focusForm();
       // Otherwise if button is clicked while expanded, collapse button
     } else if (btn.classList.contains('priority-btn--expanded')) {
-      this.toggleButtonExpansion(false);
+      this.#toggleButtonExpansion(false);
     } else {
       // Else if button is closed, expand the button
-      this.toggleButtonExpansion(true);
+      this.#toggleButtonExpansion(true);
     }
   }
 
-  updateTaskPriority(target) {
+  #updateTaskPriority(target) {
     const priorityIconContainer = target.closest(
       `.${PRIORITY_LEVEL_BUTTON_CLASS}`
     );
     const newPriorityLevel = priorityIconContainer.dataset.priority;
     this.button.dataset.priority = newPriorityLevel;
-
+    this.priorityLevel = newPriorityLevel;
     this.button.querySelector(
       'i'
     ).classList = `${FA_ICON_CLASSES} p${newPriorityLevel}`;
@@ -64,7 +62,7 @@ export default class PriorityButton {
    * @param {HTMLElement} btn
    * @param {boolean} [expand=true]
    */
-  toggleButtonExpansion(expand = true) {
+  #toggleButtonExpansion(expand = true) {
     this.button.classList.toggle('priority-btn--expanded', expand);
     expand ? this.expand() : this.collapse();
   }
@@ -78,6 +76,7 @@ export default class PriorityButton {
       <i class="${FA_ICON_CLASSES} p${level}"></i>
       `;
     });
+
     this.button.append(priorityLevelButtonsContainer);
   }
 
@@ -86,7 +85,8 @@ export default class PriorityButton {
   }
 
   reset() {
-    this.button.dataset.priority = 4;
+    this.priorityLevel = 4;
+    this.button.dataset.priority = this.priorityLevel;
     this.button.querySelector(
       'i'
     ).classList = `${FA_ICON_CLASSES} p${this.priorityLevel}`;
@@ -96,11 +96,13 @@ export default class PriorityButton {
    * Focuses the task editor's main input field if it's blank, otherwise
    * focuses the submit button so the user can press Enter to submit the form.
    */
-  focusForm() {
-    const formTaskTitleField = this.taskForm.form.querySelector('input');
-    const formSubmitButton = this.taskForm.form.querySelector(
-      'button[type="submit"]'
-    );
+  #focusForm() {
+    const formTaskTitleField = this.button
+      .closest('form')
+      .querySelector('input');
+    const formSubmitButton = this.button
+      .closest('form')
+      .querySelector('button[type="submit"]');
     formTaskTitleField.value !== ''
       ? formSubmitButton.focus()
       : formTaskTitleField.focus();

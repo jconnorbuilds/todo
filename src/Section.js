@@ -1,31 +1,36 @@
 import DOMSection from './DOM-section.js';
+import Project from './Project.js';
 import TaskForm from './TaskForm.js';
 import { slugify } from './utils.js';
 
 export default class Section {
   tasks = [];
-  static allSections = [];
+  static #allSections = [];
   static #id = 0;
-  constructor(name, project) {
+  constructor(data) {
     this.id = Section.id;
-    this.name = name;
-    this.slug = slugify(name);
-    this.projectSlug = slugify(project.name);
-    this.project = project;
-    this.taskForm = new TaskForm(this);
-    this.parentContainer = document.querySelector('div.main-window');
-    this.taskContainerSelector = `.section-container.${this.project.slug}.${this.slug}`;
+    this.projectId = data.projectId;
+    this.name = data.name;
+    this.slug = slugify(data.name);
+
     Section.allSections.push(this);
+    Project.saveProjects();
+    this.taskForm = new TaskForm(this.id);
+    this.parentContainer = document.querySelector('div.main-window');
+    this.taskContainerSelector = `.section-container.${this.slug}`;
   }
 
   static getInstance(id) {
     console.log(this.allSections);
     for (const instance of this.allSections) {
-      console.log(instance.id);
       if (instance.id == id) {
         return instance;
       }
     }
+  }
+
+  static get allSections() {
+    return this.#allSections;
   }
 
   get taskContainer() {
@@ -34,6 +39,10 @@ export default class Section {
 
   static get id() {
     return this.#id++;
+  }
+
+  get project() {
+    return Project.getInstance(this.projectId);
   }
 
   addTask(item) {

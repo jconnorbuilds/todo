@@ -2,13 +2,13 @@ import Task from './Task.js';
 import { toggleIconStyleOnMouseEvents } from './DOM-task-form.js';
 import PriorityButton from './priorityBtnComponent.js';
 import DueDate from './dueDateButtonComponent.js';
+import Section from './Section.js';
 
 export default class TaskForm {
   #isHidden;
-  constructor(section) {
-    this.section = section;
-    this.project = section.project;
-    this.priorityButton = new PriorityButton(this);
+  constructor(sectionId) {
+    this.sectionId = sectionId;
+    this.priorityButton = new PriorityButton();
     this.dueDate = new DueDate();
     this.addTaskBtn = this.makeAddTaskBtn();
     this.submitButton = this.#makeSubmitButton();
@@ -17,15 +17,22 @@ export default class TaskForm {
   }
 
   get parentContainer() {
-    return document.querySelector(
-      `.${this.project.slug}.${this.section.slug} div.form-container`
-    );
+    return document.querySelector(`.${this.section.slug} div.form-container`);
+  }
+
+  get section() {
+    const sec = Section.getInstance(this.sectionId);
+    return sec;
+  }
+
+  get project() {
+    return this.section.project;
   }
 
   reset() {
     this.form.reset();
-    // this.draw();
     this.dueDate.reset();
+    this.priorityButton.reset();
     this.toggleEnabledDisabledSubmitButton();
 
     // Focus the main input after form refreshes
@@ -124,12 +131,11 @@ export default class TaskForm {
     form.append(footer);
 
     // Add event listeners
-    console.log(this.section.id);
     form.addEventListener('submit', (e) => {
       const formData = {
         title: taskNameField.value,
         description: descriptionField.value,
-        priority: +priorityButton.dataset.priority,
+        priority: +this.priorityButton.priorityLevel,
         dueDate: this.dueDate.date,
         sectionId: this.section.id,
       };
