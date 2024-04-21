@@ -8,13 +8,20 @@ export default class Section {
   static #allSections = [];
   static #id = 0;
   constructor(data) {
-    this.id = Section.id;
-    this.projectId = data.projectId;
-    this.name = data.name;
+    if (data.id === undefined) {
+      console.log(data.id);
+      this.id = Section.id;
+      this.projectId = data.projectId;
+      this.name = data.name;
+      this.project.sections.push(this);
+      Project.saveProjects();
+    } else {
+      this.id = data.id;
+      this.projectId = data.projectId;
+      this.name = data.name;
+    }
     this.slug = slugify(data.name);
-
     Section.allSections.push(this);
-    Project.saveProjects();
     this.taskForm = new TaskForm(this.id);
     this.parentContainer = document.querySelector('div.main-window');
     this.taskContainerSelector = `.section-container.${this.slug}`;
@@ -28,6 +35,14 @@ export default class Section {
       }
     }
   }
+
+  // save() {
+  //   if (!this.project.sections.includes(this)) {
+  //     this.project.sections.push(this);
+  //   }
+
+  //   Project.saveProjects();
+  // }
 
   static get allSections() {
     return this.#allSections;

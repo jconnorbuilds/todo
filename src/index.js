@@ -26,6 +26,4 @@ window.addEventListener('keydown', (e) => {
 //   localStorage.removeItem(key);
 // });
 
-// Task.loadTasks();
 Project.loadProjects();
-Section.loadSections();

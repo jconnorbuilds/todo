@@ -12,26 +12,30 @@ export default class Project {
     if (typeof data == 'string') {
       this.id = Project.id;
       this.name = data;
+      this.sections = [];
     } else {
       this.id = data.id;
       this.name = data.name;
+      this.sections = data.sections;
     }
     this.slug = slugify(this.name);
-    this.sections = [];
     Project.allProjects.push(this);
     Project.saveProjects();
   }
 
   static loadProjects() {
     let loadedProjects = JSON.parse(localStorage.getItem('projects'));
-    loadedProjects?.forEach((project) => new Project(project).draw());
+    console.log(loadedProjects);
+    loadedProjects?.forEach((project) => {
+      new Project(project).draw();
+      project.sections.forEach((section) => new Section(section).draw());
+    });
 
     return loadedProjects;
   }
 
   static saveProjects() {
     localStorage.setItem('projects', JSON.stringify(Project.allProjects));
-    console.log(localStorage['projects']);
   }
 
   static get id() {
