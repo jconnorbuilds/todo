@@ -2,5 +2,6 @@
   "typescript.format.enable": true,
   "js/ts.implicitProjectConfig.strictFunctionTypes": false,
   "typescript.validate.enable": false,
-  "javascript.validate.enable": true
+  "javascript.validate.enable": true,
+  "prettier.arrowParens": "avoid"
 }

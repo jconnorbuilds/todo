@@ -19,6 +19,7 @@ export default class Task {
     this.dueDate = data.dueDate;
     this.id = Task.getId(data);
     this.sectionId = data.sectionId;
+    this.isCompleted = data.isCompleted;
     this.save();
   }
 

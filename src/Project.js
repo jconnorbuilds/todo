@@ -6,73 +6,79 @@ export default class Project {
   static #_id = 0;
   name;
   #isActive = false;
-  static #defaultProject;
   static currentProject;
-  static #allProjects = [];
-  constructor(data) {
-    if (typeof data == 'string') {
-      this.id = Project.id;
-      this.name = data;
-      this.sections = [];
-    } else {
-      this.id = data.id;
-      this.name = data.name;
-      this.sections = data.sections;
-    }
+  static allProjects = [];
+  constructor({ id = Project.id, name, isActive = false } = {}) {
+    this.id = id;
+    this.name = name || 'Untitled project';
+    this.isActive = isActive;
+    this.sections = [];
     this.slug = slugify(this.name);
     Project.allProjects.push(this);
-    Project.saveProjects();
+    this.save();
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      sections: this.sections,
+      isActive: this.isActive,
+    };
   }
 
   static loadProjects() {
     let loadedProjectsJSON = JSON.parse(localStorage.getItem('projects'));
-
-    if (loadedProjectsJSON) {
-      let projectToMakeActive;
-      loadedProjectsJSON?.forEach((project) => {
-        let loadedProject = new Project(project);
-        if (loadedProject.id === 0) projectToMakeActive = loadedProject;
-        loadedProject.addToSidebar();
-        loadedProject.sections = [];
-
-        project.sections.forEach((section) => {
-          let loadedSection = loadedProject.addSection(new Section(section));
-          loadedSection.tasks = [];
-          section.tasks.forEach((task) =>
-            loadedSection.addTask(new Task(task))
-          );
-        });
-      });
-      projectToMakeActive.activate();
-    } else {
-      Project.createDefaultProject();
+    if (!loadedProjectsJSON) {
+      Project.#createDefaultProjects();
+      return;
     }
 
-    return loadedProjectsJSON;
+    try {
+      loadedProjectsJSON.forEach(projectJSON => {
+        let loadedProject = new Project(projectJSON);
+        loadedProject.addToSidebar();
+
+        projectJSON.sections.forEach(sectionJSON => {
+          let loadedSection = loadedProject.addSection(
+            new Section(sectionJSON)
+          );
+          sectionJSON.tasks.forEach(taskJSON =>
+            loadedSection.addTask(new Task(taskJSON))
+          );
+        });
+        if (loadedProject.isActive) loadedProject.activate();
+      });
+    } catch (error) {
+      console.error('Failed to load projects: ', error);
+      Project.#createDefaultProjects();
+    }
   }
 
-  static createDefaultProject() {
-    const defaultProject = new Project('Home');
+  static #createDefaultProjects() {
+    // Create the first default project
+    const defaultProject = new Project({ name: 'Home' });
     defaultProject.addSection(
-      new Section({ name: 'Default', projectId: defaultProject.id })
+      new Section({
+        name: 'Default',
+        projectId: defaultProject.id,
+      })
     );
     defaultProject.addToSidebar();
-    // defaultProject.sections[0].draw();
-    // defaultProject.isActive = true;
+    defaultProject.activate();
 
-    const secondProject = new Project('Another one');
+    // Create a second default project
+    const secondProject = new Project({ name: 'Work' });
     secondProject.addSection(
       new Section({ name: 'Default', projectId: secondProject.id })
     );
     secondProject.addSection(
       new Section({
-        name: 'Another Section',
+        name: 'Another section',
         projectId: secondProject.id,
       })
     );
-
     secondProject.addToSidebar();
-    secondProject.activate();
   }
 
   static saveProjects() {
@@ -81,10 +87,6 @@ export default class Project {
 
   static get id() {
     return this.#_id++;
-  }
-
-  static get allProjects() {
-    return this.#allProjects;
   }
 
   static get defaultProject() {
@@ -101,11 +103,12 @@ export default class Project {
   }
 
   set isActive(active) {
-    if (active) {
-      Project.allProjects.forEach((project) => (project.#isActive = false));
+    if (active && !this.active) {
+      Project.allProjects.forEach(project => (project.#isActive = false));
       Project.currentProject = this;
     }
     this.#isActive = active;
+    this.save();
   }
 
   get isActive() {
@@ -125,7 +128,6 @@ export default class Project {
     `;
 
     projectLi.addEventListener('click', () => {
-      console.log(this);
       this.activate();
     });
 
@@ -138,14 +140,6 @@ export default class Project {
   }
 
   addSection(sectionObj) {
-    // const newSection = new Section({
-    //   name: sectionName,
-    //   projectId: this.id,
-    // });
-
-    // this.sections.push(newSection);
-    // if (this === Project.currentProject) newSection.draw();
-    // this.save();
     this.sections.push(sectionObj);
     this.save();
 
@@ -154,9 +148,9 @@ export default class Project {
 
   getTasks() {
     const tasks = {};
-    this.sections.forEach((section) => {
+    this.sections.forEach(section => {
       const sectionTasks = [];
-      section.tasks.forEach((task) => sectionTasks.push(task));
+      section.tasks.forEach(task => sectionTasks.push(task));
       tasks[section.name] = sectionTasks;
     });
     return tasks;
@@ -165,7 +159,7 @@ export default class Project {
   updateUI() {
     // Update styles for the sidebar project list
     const projects = document.querySelectorAll('.sidebar__project');
-    projects.forEach((project) => {
+    projects.forEach(project => {
       +project.dataset.id === this.id
         ? this.#toggleActiveClass(project, true)
         : this.#toggleActiveClass(project, false);
@@ -177,13 +171,13 @@ export default class Project {
     // Clear all project sections from the main window
     document
       .querySelectorAll('.section-container')
-      ?.forEach((section) => section.remove());
+      ?.forEach(section => section.remove());
 
     // Draw project sections
     this.#drawSections();
 
     // Make sure the "Add Task" button is showing
-    this.sections.forEach((section) => section.taskForm.showAddTaskButton());
+    this.sections.forEach(section => section.taskForm.showAddTaskButton());
   }
 
   #toggleActiveClass(element, isActive) {
@@ -191,9 +185,9 @@ export default class Project {
   }
 
   #drawSections() {
-    this.sections.forEach((section) => {
+    this.sections.forEach(section => {
       section.draw();
-      section.tasks.forEach((task) => task.draw(section.taskContainer));
+      section.tasks.forEach(task => task.draw(section.taskContainer));
     });
   }
 

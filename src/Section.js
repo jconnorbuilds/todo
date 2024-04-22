@@ -6,19 +6,12 @@ import { slugify } from './utils.js';
 export default class Section {
   static #allSections = [];
   static #id = 0;
-  constructor(data) {
-    if (data.id === undefined) {
-      this.id = Section.id;
-      this.projectId = data.projectId;
-      this.name = data.name;
-      this.tasks = [];
-    } else {
-      this.id = data.id;
-      this.projectId = data.projectId;
-      this.name = data.name;
-      this.tasks = data.tasks;
-    }
-    this.slug = slugify(data.name);
+  constructor({ id = Section.id, projectId, name }) {
+    this.id = id;
+    this.projectId = projectId;
+    this.name = name;
+    this.tasks = [];
+    this.slug = slugify(this.name);
     Section.allSections.push(this);
     this.taskForm = new TaskForm(this.id);
     this.parentContainer = document.querySelector('div.main-window');
@@ -53,6 +46,8 @@ export default class Section {
   addTask(item) {
     this.tasks.push(item);
     this.save();
+
+    return item;
   }
 
   draw(parentContainer = this.parentContainer) {
