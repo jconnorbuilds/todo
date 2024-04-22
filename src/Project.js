@@ -1,4 +1,5 @@
 import Section from './Section.js';
+import Task from './Task.js';
 import { slugify } from './utils.js';
 
 export default class Project {
@@ -24,14 +25,54 @@ export default class Project {
   }
 
   static loadProjects() {
-    let loadedProjects = JSON.parse(localStorage.getItem('projects'));
-    console.log(loadedProjects);
-    loadedProjects?.forEach((project) => {
-      new Project(project).draw();
-      project.sections.forEach((section) => new Section(section).draw());
-    });
+    let loadedProjectsJSON = JSON.parse(localStorage.getItem('projects'));
 
-    return loadedProjects;
+    if (loadedProjectsJSON) {
+      let projectToMakeActive;
+      loadedProjectsJSON?.forEach((project) => {
+        let loadedProject = new Project(project);
+        if (loadedProject.id === 0) projectToMakeActive = loadedProject;
+        loadedProject.addToSidebar();
+        loadedProject.sections = [];
+
+        project.sections.forEach((section) => {
+          let loadedSection = loadedProject.addSection(new Section(section));
+          loadedSection.tasks = [];
+          section.tasks.forEach((task) =>
+            loadedSection.addTask(new Task(task))
+          );
+        });
+      });
+      projectToMakeActive.activate();
+    } else {
+      Project.createDefaultProject();
+    }
+
+    return loadedProjectsJSON;
+  }
+
+  static createDefaultProject() {
+    const defaultProject = new Project('Home');
+    defaultProject.addSection(
+      new Section({ name: 'Default', projectId: defaultProject.id })
+    );
+    defaultProject.addToSidebar();
+    // defaultProject.sections[0].draw();
+    // defaultProject.isActive = true;
+
+    const secondProject = new Project('Another one');
+    secondProject.addSection(
+      new Section({ name: 'Default', projectId: secondProject.id })
+    );
+    secondProject.addSection(
+      new Section({
+        name: 'Another Section',
+        projectId: secondProject.id,
+      })
+    );
+
+    secondProject.addToSidebar();
+    secondProject.activate();
   }
 
   static saveProjects() {
@@ -65,15 +106,13 @@ export default class Project {
       Project.currentProject = this;
     }
     this.#isActive = active;
-
-    this.updateUI();
   }
 
   get isActive() {
     return this.#isActive;
   }
 
-  draw() {
+  addToSidebar() {
     const projectsArea = document.querySelector('.sidebar__projects-list');
     const projectLi = document.createElement('li');
     projectLi.classList = 'sidebar__project';
@@ -86,20 +125,31 @@ export default class Project {
     `;
 
     projectLi.addEventListener('click', () => {
-      this.isActive = true;
+      console.log(this);
+      this.activate();
     });
 
     projectsArea.append(projectLi);
   }
 
-  addSection(sectionName) {
-    const newSection = new Section({
-      name: sectionName,
-      projectId: this.id,
-    });
+  activate() {
+    this.isActive = true;
+    this.updateUI();
+  }
 
-    this.sections.push(newSection);
-    newSection.draw();
+  addSection(sectionObj) {
+    // const newSection = new Section({
+    //   name: sectionName,
+    //   projectId: this.id,
+    // });
+
+    // this.sections.push(newSection);
+    // if (this === Project.currentProject) newSection.draw();
+    // this.save();
+    this.sections.push(sectionObj);
+    this.save();
+
+    return sectionObj;
   }
 
   getTasks() {
@@ -110,10 +160,6 @@ export default class Project {
       tasks[section.name] = sectionTasks;
     });
     return tasks;
-  }
-
-  logSections() {
-    for (let s of this.sections) console.log(s.name);
   }
 
   updateUI() {
@@ -134,7 +180,7 @@ export default class Project {
       ?.forEach((section) => section.remove());
 
     // Draw project sections
-    this.drawSections();
+    this.#drawSections();
 
     // Make sure the "Add Task" button is showing
     this.sections.forEach((section) => section.taskForm.showAddTaskButton());
@@ -144,7 +190,14 @@ export default class Project {
     element.classList.toggle('active', isActive);
   }
 
-  drawSections() {
-    this.sections.forEach((section) => section.draw());
+  #drawSections() {
+    this.sections.forEach((section) => {
+      section.draw();
+      section.tasks.forEach((task) => task.draw(section.taskContainer));
+    });
+  }
+
+  save() {
+    Project.saveProjects();
   }
 }

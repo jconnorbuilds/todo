@@ -1,4 +1,5 @@
 import Section from './Section.js';
+import Project from './Project.js';
 import { FA_ICON_CLASSES } from './dueDateButtonComponent.js';
 import { differenceInCalendarDays } from 'date-fns';
 
@@ -18,7 +19,7 @@ export default class Task {
     this.dueDate = data.dueDate;
     this.id = Task.getId(data);
     this.sectionId = data.sectionId;
-    this.saveTask(this);
+    this.save();
   }
 
   static getId(data) {
@@ -27,23 +28,6 @@ export default class Task {
       return data.id;
     }
     return this.#_id++;
-  }
-
-  static loadTasks() {
-    let tasksToLoad = [];
-    // Object.entries(localStorage).forEach(([key, value]) => {
-    //   console.log(key, value);
-    //   if (key.slice(0, 5) === 'task-') {
-    //     const loadedTask = new Task(JSON.parse(value));
-    //     tasksToLoad.push(loadedTask);
-    //   }
-    // });
-    // console.log(tasksToLoad);
-    // tasksToLoad.forEach((task) => {
-    //   const taskContainer = task.getSection().taskContainer;
-    //   task.draw(taskContainer);
-    // });
-    return tasksToLoad;
   }
 
   get isDeleted() {
@@ -131,8 +115,7 @@ export default class Task {
     return daysUntilDue;
   }
 
-  saveTask(task) {
-    // localStorage.setItem(`task-${task.id}`, JSON.stringify(task));
-    // console.log({ localStorage });
+  save() {
+    Project.saveProjects();
   }
 }

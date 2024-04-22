@@ -4,45 +4,35 @@ import TaskForm from './TaskForm.js';
 import { slugify } from './utils.js';
 
 export default class Section {
-  tasks = [];
   static #allSections = [];
   static #id = 0;
   constructor(data) {
     if (data.id === undefined) {
-      console.log(data.id);
       this.id = Section.id;
       this.projectId = data.projectId;
       this.name = data.name;
-      this.project.sections.push(this);
-      Project.saveProjects();
+      this.tasks = [];
     } else {
       this.id = data.id;
       this.projectId = data.projectId;
       this.name = data.name;
+      this.tasks = data.tasks;
     }
     this.slug = slugify(data.name);
     Section.allSections.push(this);
     this.taskForm = new TaskForm(this.id);
     this.parentContainer = document.querySelector('div.main-window');
     this.taskContainerSelector = `.section-container.${this.slug}`;
+    this.save();
   }
 
   static getInstance(id) {
-    console.log(this.allSections);
     for (const instance of this.allSections) {
       if (instance.id == id) {
         return instance;
       }
     }
   }
-
-  // save() {
-  //   if (!this.project.sections.includes(this)) {
-  //     this.project.sections.push(this);
-  //   }
-
-  //   Project.saveProjects();
-  // }
 
   static get allSections() {
     return this.#allSections;
@@ -62,10 +52,14 @@ export default class Section {
 
   addTask(item) {
     this.tasks.push(item);
+    this.save();
   }
 
   draw(parentContainer = this.parentContainer) {
     parentContainer.append(DOMSection(this));
-    this.tasks.forEach((task) => task.draw());
+  }
+
+  save() {
+    Project.saveProjects();
   }
 }
