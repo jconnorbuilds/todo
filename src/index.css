@@ -272,7 +272,7 @@ section.section-container > * {
   padding: 8px 0;
 }
 
-.todo-item__ {
+.todo-item {
   display: flex;
   flex-direction: row;
   align-items: flex-start;

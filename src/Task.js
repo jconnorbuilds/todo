@@ -26,6 +26,19 @@ export default class Task {
     this.save();
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      priority: this.priority,
+      dueDate: this.dueDate,
+      sectionId: this.sectionId,
+      isCompleted: this.isCompleted,
+      isDeleted: this.isDeleted,
+    };
+  }
+
   static get id() {
     return this.#_id++;
   }
@@ -39,14 +52,16 @@ export default class Task {
     const taskContainer = renderTarget;
     const newItem = document.createElement('div');
     const dateDisplay = this.getDueDateDisplay();
-    newItem.classList = 'todo-item__';
+    newItem.classList = 'todo-item';
 
     newItem.innerHTML = `
     <div class="todo-item__checkbox">
-      <input class="p${this.priority}" type="checkbox">
-      <span class="checkmark"</span>
+      <input class="p${this.priority}" type="checkbox" ${
+      this.isCompleted ? 'checked' : ''
+    }>
+      <span class="checkmark"></span>
     </div>
-    <div class="todo-item__todo-info">
+    <div class="todo-item__todo-info ${this.isCompleted ? 'done' : ''}">
       <div class="todo-item__main-title">${this.title}</div>
         <div class="todo-item__description">${this.description}</div>
         <div class="todo-item__due-date ${dateDisplay.timelyClass}">
@@ -56,6 +71,18 @@ export default class Task {
     </div>
     `;
 
+    const toggleCompleted = e => {
+      let checked = e.target.checked;
+      this.isCompleted = checked;
+      console.log(
+        '🚀 ~ Task ~ toggleCompleted ~ this.isCompleted:',
+        this.isCompleted
+      );
+      newItem
+        .querySelector('.todo-item__todo-info')
+        .classList.toggle('done', checked);
+    };
+
     taskContainer.insertBefore(
       newItem,
       taskContainer.querySelector('div.new-todo-wrapper')
@@ -63,11 +90,7 @@ export default class Task {
 
     newItem
       .querySelector('input[type="checkbox"]')
-      .addEventListener('change', e => {
-        newItem
-          .querySelector('.todo-item__todo-info')
-          .classList.toggle('done', e.target.checked);
-      });
+      .addEventListener('change', toggleCompleted);
   }
 
   getDueDateDisplay() {
@@ -83,6 +106,7 @@ export default class Task {
       'Saturday',
       'Sunday',
     ];
+
     if (daysUntilDue >= 0) {
       result.timelyClass = 'on-time';
       result.dueDateString =
