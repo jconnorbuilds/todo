@@ -6,7 +6,7 @@ import { slugify } from './utils.js';
 export default class Section {
   static #allSections = [];
   static #id = 0;
-  constructor({ id = Section.id, projectId, name }) {
+  constructor({ id = Section.id, projectId, name } = {}) {
     this.id = id;
     this.projectId = projectId;
     this.name = name;
@@ -16,7 +16,6 @@ export default class Section {
     this.taskForm = new TaskForm(this.id);
     this.parentContainer = document.querySelector('div.main-window');
     this.taskContainerSelector = `.section-container.${this.slug}`;
-    this.save();
   }
 
   static getInstance(id) {

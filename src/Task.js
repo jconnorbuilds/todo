@@ -5,45 +5,29 @@ import { differenceInCalendarDays } from 'date-fns';
 
 export default class Task {
   static #_id = 0;
-  title;
-  description;
-  priority;
-  dueDate;
-  _isDeleted = false;
-  _isCompleted = false;
-
-  constructor(data) {
-    this.title = data.title;
-    this.description = data.description;
-    this.priority = data.priority;
-    this.dueDate = data.dueDate;
-    this.id = Task.getId(data);
-    this.sectionId = data.sectionId;
-    this.isCompleted = data.isCompleted;
+  constructor({
+    id = Task.id,
+    title,
+    description,
+    priority,
+    dueDate,
+    sectionId,
+    isCompleted = false,
+    isDeleted = false,
+  } = {}) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.priority = priority;
+    this.dueDate = dueDate;
+    this.sectionId = sectionId;
+    this.isCompleted = isCompleted;
+    this.isDeleted = isDeleted;
     this.save();
   }
 
-  static getId(data) {
-    if (data.id) {
-      this.#_id++;
-      return data.id;
-    }
+  static get id() {
     return this.#_id++;
-  }
-
-  get isDeleted() {
-    return this._isDeleted;
-  }
-  set isDeleted(bool) {
-    _isDeleted = bool;
-  }
-
-  get isCompleted() {
-    return this._isCompleted;
-  }
-
-  set isCompleted(bool) {
-    this._isCompleted = bool;
   }
 
   getSection(id = this.sectionId) {
@@ -59,8 +43,8 @@ export default class Task {
 
     newItem.innerHTML = `
     <div class="todo-item__checkbox">
-    <input class="p${this.priority}" type="checkbox">
-    <span class="checkmark"</span>
+      <input class="p${this.priority}" type="checkbox">
+      <span class="checkmark"</span>
     </div>
     <div class="todo-item__todo-info">
       <div class="todo-item__main-title">${this.title}</div>
@@ -76,10 +60,18 @@ export default class Task {
       newItem,
       taskContainer.querySelector('div.new-todo-wrapper')
     );
+
+    newItem
+      .querySelector('input[type="checkbox"]')
+      .addEventListener('change', e => {
+        newItem
+          .querySelector('.todo-item__todo-info')
+          .classList.toggle('done', e.target.checked);
+      });
   }
 
   getDueDateDisplay() {
-    const daysUntilDue = this.getDaysUntilDue(this.dueDate);
+    const daysUntilDue = this.#getDaysUntilDue(this.dueDate);
     const result = { dueDateString: '', timelyClass: '' };
     const daysList = [
       '_',
@@ -111,7 +103,7 @@ export default class Task {
     return result;
   }
 
-  getDaysUntilDue(dueDate) {
+  #getDaysUntilDue(dueDate) {
     const daysUntilDue = differenceInCalendarDays(dueDate, new Date());
     return daysUntilDue;
   }

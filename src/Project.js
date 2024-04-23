@@ -15,7 +15,6 @@ export default class Project {
     this.sections = [];
     this.slug = slugify(this.name);
     Project.allProjects.push(this);
-    this.save();
   }
 
   toJSON() {
