@@ -12,9 +12,9 @@ export default class Project {
     this.id = id;
     this.name = name || 'Untitled project';
     this.isActive = isActive;
-    this.sections = [];
     this.slug = slugify(this.name);
     Project.allProjects.push(this);
+    this.sections = [Section.create({ name: 'Default', projectId: this.id })];
   }
 
   toJSON() {
@@ -26,6 +26,13 @@ export default class Project {
     };
   }
 
+  static create(data) {
+    const project = new Project(data);
+    project.addToSidebar();
+    Project.saveProjects();
+    return project;
+  }
+
   static loadProjects() {
     let loadedProjectsJSON = JSON.parse(localStorage.getItem('projects'));
     if (!loadedProjectsJSON) {
@@ -35,15 +42,16 @@ export default class Project {
 
     try {
       loadedProjectsJSON.forEach(projectJSON => {
-        let loadedProject = new Project(projectJSON);
-        loadedProject.addToSidebar();
+        let loadedProject = this.create(projectJSON);
 
         projectJSON.sections.forEach(sectionJSON => {
-          let loadedSection = loadedProject.addSection(
-            new Section(sectionJSON)
-          );
+          let loadedSection =
+            sectionJSON.name === 'Default'
+              ? loadedProject.sections[0]
+              : loadedProject.addSection(sectionJSON);
+
           sectionJSON.tasks.forEach(taskJSON =>
-            loadedSection.addTask(new Task(taskJSON))
+            loadedSection.addTask(taskJSON)
           );
         });
         if (loadedProject.isActive) loadedProject.activate();
@@ -56,27 +64,17 @@ export default class Project {
 
   static #createDefaultProjects() {
     // Create the first default project
-    const defaultProject = new Project({ name: 'Home' });
-    defaultProject.addSection(
-      new Section({
-        name: 'Default',
-        projectId: defaultProject.id,
-      })
-    );
+    const defaultProject = this.create({ name: 'Home' });
     defaultProject.addToSidebar();
     defaultProject.activate();
 
     // Create a second default project
-    const secondProject = new Project({ name: 'Work' });
-    secondProject.addSection(
-      new Section({ name: 'Default', projectId: secondProject.id })
-    );
-    secondProject.addSection(
-      new Section({
-        name: 'Another section',
-        projectId: secondProject.id,
-      })
-    );
+    const secondProject = this.create({ name: 'Work' });
+    secondProject.addSection({
+      name: 'Another section',
+      projectId: secondProject.id,
+    });
+
     secondProject.addToSidebar();
   }
 
@@ -85,6 +83,9 @@ export default class Project {
   }
 
   static get id() {
+    while (Project.allProjects.find(project => project.id === this.#_id)) {
+      ++this.#_id;
+    }
     return this.#_id++;
   }
 
@@ -138,11 +139,12 @@ export default class Project {
     this.updateUI();
   }
 
-  addSection(sectionObj) {
-    this.sections.push(sectionObj);
+  addSection(data) {
+    const section = Section.create(data);
+    this.sections.push(section);
     this.save();
 
-    return sectionObj;
+    return section;
   }
 
   getTasks() {

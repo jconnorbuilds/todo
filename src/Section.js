@@ -1,11 +1,12 @@
 import DOMSection from './DOM-section.js';
 import Project from './Project.js';
 import TaskForm from './TaskForm.js';
+import Task from './Task.js';
 import { slugify } from './utils.js';
 
 export default class Section {
   static #allSections = [];
-  static #id = 0;
+  static #_id = 0;
   constructor({ id = Section.id, projectId, name } = {}) {
     this.id = id;
     this.projectId = projectId;
@@ -30,23 +31,32 @@ export default class Section {
     return this.#allSections;
   }
 
+  static create(data) {
+    const section = new Section(data);
+    return section;
+  }
+
   get taskContainer() {
     return document.querySelector(this.taskContainerSelector);
   }
 
   static get id() {
-    return this.#id++;
+    while (Section.allSections.find(section => section.id === this.#_id)) {
+      ++this.#_id;
+    }
+    return this.#_id++;
   }
 
   get project() {
     return Project.getInstance(this.projectId);
   }
 
-  addTask(item) {
-    this.tasks.push(item);
+  addTask(data) {
+    const task = Task.create(data);
+    this.tasks.push(task);
     this.save();
 
-    return item;
+    return task;
   }
 
   draw(parentContainer = this.parentContainer) {

@@ -22,6 +22,8 @@ export default class TaskForm {
 
   get section() {
     const sec = Section.getInstance(this.sectionId);
+    console.log('🚀 ~ TaskForm ~ getsection ~ sec:', sec);
+
     return sec;
   }
 
@@ -131,7 +133,7 @@ export default class TaskForm {
     form.append(footer);
 
     // Add event listeners
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', e => {
       const formData = {
         title: taskNameField.value,
         description: descriptionField.value,
@@ -198,8 +200,10 @@ export default class TaskForm {
     e.preventDefault();
 
     // Create the new task
-    const newTask = new Task(formData);
+    const newTask = Task.create(formData);
     this.section.addTask(newTask);
+    console.log(this.section);
+    console.log(this.project);
     newTask.draw(e.target.closest('.section-container'));
 
     // Reset the form

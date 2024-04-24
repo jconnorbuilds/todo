@@ -26,6 +26,12 @@ export default class Task {
     this.save();
   }
 
+  static create(data) {
+    const task = new Task(data);
+
+    return task;
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -74,10 +80,6 @@ export default class Task {
     const toggleCompleted = e => {
       let checked = e.target.checked;
       this.isCompleted = checked;
-      console.log(
-        '🚀 ~ Task ~ toggleCompleted ~ this.isCompleted:',
-        this.isCompleted
-      );
       newItem
         .querySelector('.todo-item__todo-info')
         .classList.toggle('done', checked);

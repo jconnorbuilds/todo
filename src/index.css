@@ -192,11 +192,11 @@ div.container {
   grid-template-columns: 225px auto;
 }
 
-.sidebar__ {
+.sidebar {
   background-color: var(--sidebar-bg-color);
 }
 
-.sidebar__ > * {
+.sidebar > * {
   padding: 1em;
   padding-bottom: 0;
 }
@@ -207,7 +207,7 @@ div.container {
   align-items: center;
 }
 
-.sidebar__heading-button {
+.sidebar .heading-btn {
   font-size: 1em;
   padding: 0 0.5em;
   border: none;
@@ -216,14 +216,14 @@ div.container {
   color: var(--secondary-font-color);
   transition: background-color 200ms;
 }
-.sidebar__heading-button:hover {
+.sidebar .heading-btn:hover {
   background-color: var(--button-hover-color);
 }
-.sidebar__ .heading i {
+.sidebar .heading i {
   opacity: 0;
   transition: opacity 200ms;
 }
-.sidebar__ .heading:hover i {
+.sidebar .heading:hover i {
   opacity: 100;
 }
 

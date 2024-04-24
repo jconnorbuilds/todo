@@ -11,4 +11,9 @@ window.addEventListener('keydown', e => {
   }
 });
 
+const newProjectBtn = document.querySelector('button.sidebar__new-project');
+newProjectBtn.addEventListener('click', () => {
+  let newProject = Project.create({ name: 'Dynamically added' });
+});
+
 Project.loadProjects();
