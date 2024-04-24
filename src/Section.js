@@ -7,11 +7,11 @@ import { slugify } from './utils.js';
 export default class Section {
   static #allSections = [];
   static #_id = 0;
-  constructor({ id = Section.id, projectId, name } = {}) {
+  constructor({ id = Section.id, projectId, name, tasks } = {}) {
     this.id = id;
     this.projectId = projectId;
     this.name = name;
-    this.tasks = [];
+    this.tasks = tasks ? tasks.map(task => Task.create(task)) : [];
     this.slug = slugify(this.name);
     Section.allSections.push(this);
     this.taskForm = new TaskForm(this.id);

@@ -8,13 +8,15 @@ export default class Project {
   #isActive = false;
   static currentProject;
   static allProjects = [];
-  constructor({ id = Project.id, name, isActive = false } = {}) {
+  constructor({ id = Project.id, name, isActive = false, sections } = {}) {
     this.id = id;
     this.name = name || 'Untitled project';
     this.isActive = isActive;
     this.slug = slugify(this.name);
     Project.allProjects.push(this);
-    this.sections = [Section.create({ name: 'Default', projectId: this.id })];
+    this.sections = sections
+      ? sections.map(section => Section.create(section))
+      : [Section.create({ name: 'Default', projectId: this.id })];
   }
 
   toJSON() {
@@ -43,17 +45,6 @@ export default class Project {
     try {
       loadedProjectsJSON.forEach(projectJSON => {
         let loadedProject = this.create(projectJSON);
-
-        projectJSON.sections.forEach(sectionJSON => {
-          let loadedSection =
-            sectionJSON.name === 'Default'
-              ? loadedProject.sections[0]
-              : loadedProject.addSection(sectionJSON);
-
-          sectionJSON.tasks.forEach(taskJSON =>
-            loadedSection.addTask(taskJSON)
-          );
-        });
         if (loadedProject.isActive) loadedProject.activate();
       });
     } catch (error) {
@@ -65,7 +56,6 @@ export default class Project {
   static #createDefaultProjects() {
     // Create the first default project
     const defaultProject = this.create({ name: 'Home' });
-    defaultProject.addToSidebar();
     defaultProject.activate();
 
     // Create a second default project
@@ -74,8 +64,6 @@ export default class Project {
       name: 'Another section',
       projectId: secondProject.id,
     });
-
-    secondProject.addToSidebar();
   }
 
   static saveProjects() {
@@ -108,7 +96,6 @@ export default class Project {
       Project.currentProject = this;
     }
     this.#isActive = active;
-    this.save();
   }
 
   get isActive() {
@@ -137,12 +124,13 @@ export default class Project {
   activate() {
     this.isActive = true;
     this.updateUI();
+    this.save();
   }
 
   addSection(data) {
     const section = Section.create(data);
     this.sections.push(section);
-    this.save();
+    // this.save();
 
     return section;
   }

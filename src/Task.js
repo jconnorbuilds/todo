@@ -28,7 +28,6 @@ export default class Task {
 
   static create(data) {
     const task = new Task(data);
-
     return task;
   }
 
