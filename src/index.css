@@ -229,7 +229,6 @@ div.container {
 
 .sidebar__projects-list {
   display: grid;
-
   gap: 1em;
   padding: 1.5em;
   padding-right: 0;
@@ -237,12 +236,32 @@ div.container {
 
 .sidebar__project {
   display: flex;
+  align-items: center;
   border-radius: 4px 0 0 4px;
+  padding: 1px 6px;
   font-weight: 500;
 }
 
 .sidebar__project button {
   flex-grow: 1;
+}
+
+.sidebar__input-form {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 1px 6px;
+}
+
+.sidebar__project input {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  border-bottom: 0.5px solid var(--secondary-font-color);
+}
+
+.sidebar__project input:focus {
+  border-bottom: solid var(--highlight-color);
 }
 
 .sidebar__project.active {
@@ -337,10 +356,6 @@ form.task-form input {
 .task-details-area__ input[type='text'] {
   width: 10ch;
 }
-
-/* .due-date-btn__ {
-  width: 110px;
-} */
 
 form.task-form input[type='text']:first-child {
   font-weight: 500;

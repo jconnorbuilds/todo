@@ -12,8 +12,30 @@ window.addEventListener('keydown', e => {
 });
 
 const newProjectBtn = document.querySelector('button.sidebar__new-project');
+const sidebarProjectsList = document.querySelector('ul.sidebar__projects-list');
 newProjectBtn.addEventListener('click', () => {
-  let newProject = Project.create({ name: 'Dynamically added' });
+  const li = document.createElement('li');
+  li.classList = 'sidebar__project';
+  const inputForm = document.createElement('form');
+  inputForm.classList = 'sidebar__input-form';
+
+  const listIcon = document.createElement('i');
+  listIcon.classList = 'fa-solid fa-hashtag';
+
+  const projectNameInput = document.createElement('input');
+
+  inputForm.append(listIcon);
+  inputForm.append(projectNameInput);
+  li.append(inputForm);
+  sidebarProjectsList.append(li);
+  projectNameInput.focus();
+
+  inputForm.addEventListener('submit', e => {
+    let projectName = projectNameInput.value;
+    li.remove();
+    const newProject = Project.create({ name: projectName });
+    newProject.activate();
+  });
 });
 
 Project.loadProjects();

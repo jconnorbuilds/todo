@@ -57,21 +57,22 @@ export default class Task {
     const taskContainer = renderTarget;
     const newItem = document.createElement('div');
     const dateDisplay = this.getDueDateDisplay();
+    const forId = `task-${this.id}`;
     newItem.classList = 'todo-item';
 
     newItem.innerHTML = `
     <div class="todo-item__checkbox">
-      <input class="p${this.priority}" type="checkbox" ${
+      <input id="${forId}" class="p${this.priority}" type="checkbox" ${
       this.isCompleted ? 'checked' : ''
     }>
       <span class="checkmark"></span>
     </div>
     <div class="todo-item__todo-info ${this.isCompleted ? 'done' : ''}">
-      <div class="todo-item__main-title">${this.title}</div>
-        <div class="todo-item__description">${this.description}</div>
-        <div class="todo-item__due-date ${dateDisplay.timelyClass}">
-        <i class="${FA_ICON_CLASSES}"></i>
-        <span>${dateDisplay.dueDateString}</span>
+      <label for="${forId}" class="todo-item__main-title">${this.title}</label>
+      <div class="todo-item__description">${this.description}</div>
+      <div class="todo-item__due-date ${dateDisplay.timelyClass}">
+      <i class="${FA_ICON_CLASSES}"></i>
+      <span>${dateDisplay.dueDateString}</span>
       </div>
     </div>
     `;
@@ -82,6 +83,7 @@ export default class Task {
       newItem
         .querySelector('.todo-item__todo-info')
         .classList.toggle('done', checked);
+      this.save();
     };
 
     taskContainer.insertBefore(
