@@ -15,7 +15,9 @@ export default class Project {
     this.slug = slugify(this.name);
     Project.allProjects.push(this);
     this.sections = sections
-      ? sections.map(section => Section.create(section))
+      ? sections
+          .sort((a, b) => a.idx - b.idx)
+          .map(section => Section.create(section))
       : [Section.create({ name: 'Default', projectId: this.id })];
   }
 
@@ -130,8 +132,7 @@ export default class Project {
   addSection(data) {
     const section = Section.create(data);
     this.sections.push(section);
-    // this.save();
-
+    this.save();
     return section;
   }
 
@@ -158,9 +159,7 @@ export default class Project {
     document.querySelector('.project-title').textContent = this.name;
 
     // Clear all project sections from the main window
-    document
-      .querySelectorAll('.section-container')
-      ?.forEach(section => section.remove());
+    document.querySelectorAll('.section')?.forEach(section => section.remove());
 
     // Draw project sections
     this.#drawSections();

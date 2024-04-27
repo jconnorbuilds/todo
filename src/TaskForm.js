@@ -21,10 +21,7 @@ export default class TaskForm {
   }
 
   get section() {
-    const sec = Section.getInstance(this.sectionId);
-    console.log('🚀 ~ TaskForm ~ getsection ~ sec:', sec);
-
-    return sec;
+    return Section.getInstance(this.sectionId);
   }
 
   get project() {
@@ -204,7 +201,7 @@ export default class TaskForm {
     this.section.addTask(newTask);
     console.log(this.section);
     console.log(this.project);
-    newTask.draw(e.target.closest('.section-container'));
+    newTask.draw(e.target.closest('.section'));
 
     // Reset the form
     this.reset();

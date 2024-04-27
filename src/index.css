@@ -283,11 +283,13 @@ div.main-window h1 {
   padding-bottom: 0.5em;
 }
 
-div.main-window section.section-container {
+.section {
+  display: flex;
+  flex-direction: column;
   padding-bottom: 1em;
 }
 
-section.section-container > * {
+.section > * {
   padding: 8px 0;
 }
 
@@ -425,4 +427,28 @@ form.task-form input[type='text']:first-child {
   /* display: flex; */
   background-color: inherit;
   cursor: pointer;
+}
+
+button.section__add-section-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: inherit;
+  opacity: 0;
+  font-weight: 500;
+  color: var(--highlight-color);
+  transition: opacity 300ms;
+}
+
+button.section__add-section-button::before,
+button.section__add-section-button::after {
+  content: '';
+  height: 1px;
+  background-color: var(--highlight-color);
+  flex: 1 1 auto;
+  opacity: 0.5;
+}
+
+button.section__add-section-button:hover {
+  opacity: 1;
 }

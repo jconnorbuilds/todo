@@ -7,8 +7,9 @@ import { slugify } from './utils.js';
 export default class Section {
   static #allSections = [];
   static #_id = 0;
-  constructor({ id = Section.id, projectId, name, tasks } = {}) {
+  constructor({ id = Section.id, projectId, sectionIndex, name, tasks } = {}) {
     this.id = id;
+    this.idx = sectionIndex;
     this.projectId = projectId;
     this.name = name;
     this.tasks = tasks ? tasks.map(task => Task.create(task)) : [];
@@ -16,7 +17,19 @@ export default class Section {
     Section.allSections.push(this);
     this.taskForm = new TaskForm(this.id);
     this.parentContainer = document.querySelector('div.main-window');
-    this.taskContainerSelector = `.section-container.${this.slug}`;
+    this.taskContainerSelector = `.section.${this.slug}`;
+  }
+
+  static recalculateIndicies() {
+    let sections = document.querySelectorAll('.main-window .section');
+    let idx = 0;
+    sections.forEach(section => {
+      let thisSection = this.getInstance(section.dataset.id);
+      thisSection.idx = idx++;
+      section.dataset.idx = thisSection.idx;
+    });
+
+    Project.saveProjects();
   }
 
   static getInstance(id) {
@@ -59,8 +72,14 @@ export default class Section {
     return task;
   }
 
-  draw(parentContainer = this.parentContainer) {
-    parentContainer.append(DOMSection(this));
+  draw(previousSection = null) {
+    if (previousSection) {
+      previousSection.after(DOMSection(this));
+    } else {
+      this.parentContainer.append(DOMSection(this));
+    }
+
+    Section.recalculateIndicies();
   }
 
   save() {

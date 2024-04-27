@@ -53,7 +53,7 @@ export default class Task {
     return instance;
   }
 
-  draw(renderTarget = document.querySelector('.section-container.default')) {
+  draw(renderTarget = document.querySelector('.section.default')) {
     const taskContainer = renderTarget;
     const newItem = document.createElement('div');
     const dateDisplay = this.getDueDateDisplay();
