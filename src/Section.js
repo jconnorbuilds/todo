@@ -5,18 +5,18 @@ import Task from './Task.js';
 import { slugify } from './utils.js';
 
 export default class Section {
-  static #allSections = [];
+  static allSections = [];
   static #_id = 0;
-  constructor({ id = Section.id, projectId, sectionIndex, name, tasks } = {}) {
+  constructor({ id = Section.id, projectId, idx, name, tasks } = {}) {
     this.id = id;
-    this.idx = sectionIndex;
+    this.idx = idx;
     this.projectId = projectId;
     this.name = name;
     this.tasks = tasks ? tasks.map(task => Task.create(task)) : [];
     this.slug = slugify(this.name);
     Section.allSections.push(this);
     this.taskForm = new TaskForm(this.id);
-    this.parentContainer = document.querySelector('div.main-window');
+    this.sectionList = document.querySelector('div.main-window');
     this.taskContainerSelector = `.section.${this.slug}`;
   }
 
@@ -38,10 +38,6 @@ export default class Section {
         return instance;
       }
     }
-  }
-
-  static get allSections() {
-    return this.#allSections;
   }
 
   static create(data) {
@@ -72,13 +68,17 @@ export default class Section {
     return task;
   }
 
-  draw(previousSection = null) {
-    if (previousSection) {
-      previousSection.after(DOMSection(this));
+  draw(idx = this.idx) {
+    const sections = document.querySelectorAll('section.section');
+    if (sections.length) {
+      for (let section of sections) {
+        if (+section.dataset.idx === idx - 1) {
+          section.after(DOMSection(this));
+        }
+      }
     } else {
-      this.parentContainer.append(DOMSection(this));
+      this.sectionList.append(DOMSection(this));
     }
-
     Section.recalculateIndicies();
   }
 

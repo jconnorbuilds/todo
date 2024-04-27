@@ -8,7 +8,7 @@ const DOMSection = s => {
   const sectionEl = document.createElement('section');
   const sectionSlug = slugify(s.name);
 
-  sectionEl.dataset.idx = s.idx || _getSectionIndex(s.id);
+  sectionEl.dataset.idx = s.idx;
   sectionEl.dataset.id = s.id;
   sectionEl.classList.add('section', sectionSlug);
   sectionEl.innerHTML += `
@@ -38,6 +38,8 @@ const _getTitleElInnerHTML = section => {
 };
 
 const _drawNewSectionNameInput = e => {
+  let newSectionIdx = +e.target.closest('section.section').dataset.idx + 1;
+  console.log('🚀 ~ newSectionIdx:', newSectionIdx);
   const mainWindow = document.querySelector('.main-window');
   const form = document.createElement('form');
   const input = document.createElement('input');
@@ -48,22 +50,17 @@ const _drawNewSectionNameInput = e => {
   closestSection.after(form);
 
   form.addEventListener('submit', e => {
+    console.log(newSectionIdx);
     e.preventDefault();
     const project = Project.currentProject;
     const createdSection = project.addSection({
       name: input.value,
       projectId: project.id,
+      idx: newSectionIdx,
     });
     form.remove();
-    createdSection.draw(closestSection);
+    createdSection.draw();
   });
-};
-
-const _getSectionIndex = sectionId => {
-  let sections = document.querySelectorAll('.main-window .section');
-  const sectionIdx = sections.length;
-  Section.getInstance(sectionId).idx = sectionIdx;
-  return sectionIdx;
 };
 
 export default DOMSection;

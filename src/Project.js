@@ -18,7 +18,7 @@ export default class Project {
       ? sections
           .sort((a, b) => a.idx - b.idx)
           .map(section => Section.create(section))
-      : [Section.create({ name: 'Default', projectId: this.id })];
+      : [Section.create({ name: 'Default', projectId: this.id, idx: 0 })];
   }
 
   toJSON() {
@@ -65,6 +65,7 @@ export default class Project {
     secondProject.addSection({
       name: 'Another section',
       projectId: secondProject.id,
+      idx: 1,
     });
   }
 
@@ -111,8 +112,8 @@ export default class Project {
     projectLi.dataset.id = this.id;
     projectLi.innerHTML = `
     <button>
-    <i class="fa-solid fa-hashtag"></i>
-    <span>${this.name}</span>
+      <i class="fa-solid fa-hashtag"></i>
+      <span>${this.name}</span>
     </button>
     `;
 
@@ -132,6 +133,8 @@ export default class Project {
   addSection(data) {
     const section = Section.create(data);
     this.sections.push(section);
+    // Ensure sections are stored in index order
+    this.sections.sort((a, b) => a.idx - b.idx);
     this.save();
     return section;
   }
