@@ -177,8 +177,8 @@ export default class Project {
 
   #drawSections() {
     this.sections.forEach(section => {
-      section.draw();
-      section.tasks.forEach(task => task.draw(section.taskContainer));
+      const drawnSection = section.draw();
+      section.tasks.forEach(task => task.draw(drawnSection.taskContainer));
     });
   }
 

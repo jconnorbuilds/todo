@@ -18,8 +18,14 @@ export default class Section {
     this.taskForm = new TaskForm(this.id);
     this.sectionList = document.querySelector('div.main-window');
     this.taskContainerSelector = `.section.${this.slug}`;
+    if (this.idx === undefined) {
+      throw Error(`Section ${this.name} requires an index!`);
+    }
   }
 
+  /**
+   * Updates the section idx order when a new section is added
+   */
   static recalculateIndicies() {
     let sections = document.querySelectorAll('.main-window .section');
     let idx = 0;
@@ -80,6 +86,7 @@ export default class Section {
       this.sectionList.append(DOMSection(this));
     }
     Section.recalculateIndicies();
+    return this;
   }
 
   save() {
