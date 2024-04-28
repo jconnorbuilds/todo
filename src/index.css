@@ -116,14 +116,16 @@ button.add-todo {
 }
 
 button.add-todo i {
-  font-size: 1.4em;
+  font-size: 1.2em;
+  color: #aaa;
 }
 
 button.add-todo span {
   font-size: 1em;
 }
 
-button.add-todo:hover {
+button.add-todo:hover,
+button.add-todo:hover i {
   color: var(--highlight-color);
   background-color: inherit;
 }
@@ -260,7 +262,7 @@ div.container {
   opacity: 1;
 }
 
-.sidebar__project button.delete:hover {
+.sidebar__project button.delete:not(disabled):hover {
   color: var(--highlight-color);
   background-color: inherit;
 }
@@ -272,7 +274,8 @@ div.container {
   padding: 1px 6px;
 }
 
-.sidebar__project input {
+.sidebar__input-form input,
+.section__new-section-name-input {
   background-color: inherit;
   border: none;
   outline: none;
@@ -470,4 +473,19 @@ button.section__add-section-button::after {
 
 button.section__add-section-button:hover {
   opacity: 1;
+}
+
+.section-title {
+  border-bottom: 0.5px solid #ddd;
+}
+
+.section-title,
+.section__new-section-name-input {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.section__new-section-name-input {
+  width: 50%;
+  border-color: var(--highlight-color);
 }

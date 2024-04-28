@@ -38,29 +38,35 @@ const _getTitleElInnerHTML = section => {
 };
 
 const _drawNewSectionNameInput = e => {
-  let newSectionIdx = +e.target.closest('section.section').dataset.idx + 1;
-  console.log('🚀 ~ newSectionIdx:', newSectionIdx);
-  const mainWindow = document.querySelector('.main-window');
-  const form = document.createElement('form');
-  const input = document.createElement('input');
-  const closestSection = e.target.closest('.section');
+  // Draw the input if it's not already open
+  if (!document.querySelector('.section__new-section-name-input')) {
+    let newSectionIdx = +e.target.closest('section.section').dataset.idx + 1;
+    console.log('🚀 ~ newSectionIdx:', newSectionIdx);
+    const form = document.createElement('form');
+    const input = document.createElement('input');
+    input.classList = 'section__new-section-name-input';
+    const closestSection = e.target.closest('.section');
 
-  form.append(input);
-  // Append the form below the "Add section" button
-  closestSection.after(form);
+    form.append(input);
+    // Append the form below the "Add section" button
+    closestSection.after(form);
+    input.focus();
 
-  form.addEventListener('submit', e => {
-    console.log(newSectionIdx);
-    e.preventDefault();
-    const project = Project.currentProject;
-    const createdSection = project.addSection({
-      name: input.value,
-      projectId: project.id,
-      idx: newSectionIdx,
+    // Create and draw the new section on form submit
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const project = Project.currentProject;
+      const createdSection = project.addSection({
+        name: input.value,
+        projectId: project.id,
+        idx: newSectionIdx,
+      });
+      form.remove();
+      createdSection.draw();
     });
-    form.remove();
-    createdSection.draw();
-  });
+  } else {
+    return;
+  }
 };
 
 export default DOMSection;

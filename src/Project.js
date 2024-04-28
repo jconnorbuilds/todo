@@ -127,8 +127,10 @@ export default class Project {
     });
 
     const deleteButton = projectLi.querySelector('button.delete');
-    deleteButton.addEventListener('click', this.delete);
+    // Cheap way to disable deleting the Home (default) project
+    if (this.id === 0) deleteButton.setAttribute('disabled', '');
 
+    deleteButton.addEventListener('click', this.delete);
     projectsArea.append(projectLi);
   }
 
