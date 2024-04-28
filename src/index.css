@@ -237,13 +237,32 @@ div.container {
 .sidebar__project {
   display: flex;
   align-items: center;
+  justify-items: space-between;
   border-radius: 4px 0 0 4px;
   padding: 1px 6px;
   font-weight: 500;
 }
 
 .sidebar__project button {
-  flex-grow: 1;
+  flex: 1 1 auto;
+}
+
+.sidebar__project:has(button.delete:hover) {
+  background-color: inherit;
+}
+
+.sidebar__project button.delete {
+  flex: 0 1 auto;
+  opacity: 0;
+}
+
+.sidebar__project:hover button.delete {
+  opacity: 1;
+}
+
+.sidebar__project button.delete:hover {
+  color: var(--highlight-color);
+  background-color: inherit;
 }
 
 .sidebar__input-form {

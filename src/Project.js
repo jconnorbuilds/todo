@@ -111,17 +111,51 @@ export default class Project {
     projectLi.classList = 'sidebar__project';
     projectLi.dataset.id = this.id;
     projectLi.innerHTML = `
-    <button>
+    <button class="sidebar__project-button">
       <i class="fa-solid fa-hashtag"></i>
       <span>${this.name}</span>
     </button>
+    <button class="delete"><i class="fa-solid fa-delete-left"></i></button>
     `;
 
-    projectLi.addEventListener('click', () => {
+    const projectButton = projectLi.querySelector(
+      'button.sidebar__project-button'
+    );
+
+    projectButton.addEventListener('click', () => {
       this.activate();
     });
 
+    const deleteButton = projectLi.querySelector('button.delete');
+    deleteButton.addEventListener('click', this.delete);
+
     projectsArea.append(projectLi);
+  }
+
+  delete(e) {
+    const idToDelete = e.target.closest('.sidebar__project').dataset.id;
+
+    const idxToDelete = Project.allProjects.indexOf(
+      Project.allProjects.find(project => project.id == idToDelete)
+    );
+
+    // Delete from allProjects list
+    Project.allProjects.splice(idxToDelete, 1);
+    // Delete from sidebar
+    let projects = document.querySelectorAll('.sidebar__project');
+    for (let project of projects) {
+      if (project.dataset.id == idToDelete) {
+        project.remove();
+        break;
+      }
+    }
+
+    // For now just activate the first project
+    if (Project.currentProject.id == idToDelete) {
+      Project.allProjects[0].activate();
+    }
+
+    Project.saveProjects();
   }
 
   activate() {
