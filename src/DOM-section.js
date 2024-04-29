@@ -1,6 +1,4 @@
 import { slugify } from './utils.js';
-import TaskForm from './TaskForm.js';
-import Section from './Section.js';
 import Project from './Project.js';
 const DEFAULT_SECTION_NAME = 'Default';
 
@@ -41,7 +39,6 @@ const _drawNewSectionNameInput = e => {
   // Draw the input if it's not already open
   if (!document.querySelector('.section__new-section-name-input')) {
     let newSectionIdx = +e.target.closest('section.section').dataset.idx + 1;
-    console.log('🚀 ~ newSectionIdx:', newSectionIdx);
     const form = document.createElement('form');
     const input = document.createElement('input');
     input.classList = 'section__new-section-name-input';

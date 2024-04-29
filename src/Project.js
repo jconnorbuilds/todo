@@ -1,5 +1,4 @@
 import Section from './Section.js';
-import Task from './Task.js';
 import { slugify } from './utils.js';
 
 export default class Project {
