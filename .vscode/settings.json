@@ -3,5 +3,11 @@
   "js/ts.implicitProjectConfig.strictFunctionTypes": false,
   "typescript.validate.enable": false,
   "javascript.validate.enable": true,
-  "prettier.arrowParens": "avoid"
+  "prettier.arrowParens": "always",
+  "diffEditor.renderMarginRevertIcon": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "editor.formatOnSave": true
 }

@@ -1,22 +1,24 @@
 @import './reset.css';
 
 :root {
-  --main-bg-color: rgb(255, 255, 255);
-  --sidebar-bg-color: rgb(248, 246, 240);
+  --main-bg-color: rgb(255 255 255);
+  --secondary-bg-rgb-values: 248 246 240;
+  --secondary-bg-color: rgb(var(--secondary-bg-rgb-values));
   --primary-font-color: black;
-  --secondary-font-color: rgb(93, 93, 93);
+  --secondary-font-color: rgb(93 93 93);
   --highlight-color: #d74057;
-  --highlight-color-disabled: rgb(224, 131, 145);
-  --priority-default-rgb-values: 170, 170, 170;
-  --priority-urgent-rgb-values: 215, 64, 87;
-  --priority-low-rgb-values: 85, 111, 68;
-  --priority-mid-rgb-values: 255, 209, 49;
-  --priority-urgent-rgb-values: 215, 64, 87;
+  --highlight-color-disabled: rgb(224 131 145);
+  --priority-default-rgb-values: 170 170 170;
+  --priority-urgent-rgb-values: 215 64 87;
+  --priority-low-rgb-values: 85 111 68;
+  --priority-mid-rgb-values: 255 209 49;
+  --priority-urgent-rgb-values: 215 64 87;
   --priority-default: rgb(var(--priority-default-rgb-values));
   --priority-low: rgb(var(--priority-low-rgb-values));
   --priority-mid: rgb(var(--priority-mid-rgb-values));
   --priority-urgent: rgb(var(--priority-urgent-rgb-values));
   --button-hover-color: #ddd;
+  --default-border-color: #ccc;
 }
 
 /* Style reference https://moderncss.dev/pure-css-custom-checkbox-style/ */
@@ -37,19 +39,19 @@ input[type='checkbox'] {
 
 input[type='checkbox'].p1 {
   border: 1.8px solid var(--priority-urgent);
-  background-color: rgba(var(--priority-urgent-rgb-values), 0.1);
+  background-color: rgb(var(--priority-urgent-rgb-values) / 0.1);
 }
 input[type='checkbox'].p2 {
   border: 1.8px solid var(--priority-mid);
-  background-color: rgba(var(--priority-mid-rgb-values), 0.1);
+  background-color: rgb(var(--priority-mid-rgb-values) / 0.1);
 }
 input[type='checkbox'].p3 {
   border: 1.8px solid var(--priority-low);
-  background-color: rgba(var(--priority-low-rgb-values), 0.1);
+  background-color: rgb(var(--priority-low-rgb-values) / 0.1);
 }
 input[type='checkbox'].p4 {
   border: 1px solid var(--priority-default);
-  /* background-color: rgba(var(--priority-default-rgb-values), 0.1); */
+  /* background-color: rgb(var(--priority-default-rgb-values), 0.1); */
 }
 
 input[type='checkbox']::before {
@@ -131,8 +133,8 @@ button.add-todo:hover i {
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 14px;
   font-weight: 300;
 }
@@ -157,6 +159,49 @@ button.gentle {
   padding: 2px 5px;
   font-size: 0.9em;
 }
+
+.dd-container {
+  position: relative;
+}
+
+/* dropdown styles */
+.dropdown {
+  display: flex;
+  position: absolute;
+  top: 20px;
+  border: solid var(--default-border-color);
+  border-radius: 2px;
+  box-shadow: 3px 3px #ccc;
+  background-color: white;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1;
+}
+
+.dropdown__list-holder {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 0;
+}
+
+.dropdown__item {
+  display: flex;
+  list-style: none;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  padding: 0.5em;
+}
+
+.dropdown__item:hover {
+  background-color: #f9f9f9;
+  font-weight: 700;
+}
+
+.dropdown.hidden {
+  display: none;
+}
+/* end dropdown styles */
 
 .priority-btn--expanded .priority-btn__level-btn {
   padding: 4px 8px;
@@ -195,7 +240,7 @@ div.container {
 }
 
 .sidebar {
-  background-color: var(--sidebar-bg-color);
+  background-color: var(--secondary-bg-color);
 }
 
 .sidebar > * {
@@ -475,14 +520,24 @@ button.section__add-section-button:hover {
   opacity: 1;
 }
 
-.section-title {
+.section-header {
+  display: flex;
   border-bottom: 0.5px solid #ddd;
 }
 
-.section-title,
+.section-header__title {
+  flex: 1 1 auto;
+}
+
+.section-header__title,
 .section__new-section-name-input {
   font-size: 1.2em;
   font-weight: 500;
+}
+
+.section-header__actions {
+  display: flex;
+  flex: 0 1 auto;
 }
 
 .section__new-section-name-input {

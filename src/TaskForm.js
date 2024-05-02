@@ -130,7 +130,7 @@ export default class TaskForm {
     form.append(footer);
 
     // Add event listeners
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', (e) => {
       const formData = {
         title: taskNameField.value,
         description: descriptionField.value,
@@ -144,7 +144,7 @@ export default class TaskForm {
 
     taskNameField.addEventListener(
       'input',
-      this.toggleEnabledDisabledSubmitButton.bind(this)
+      this.toggleEnabledDisabledSubmitButton.bind(this),
     );
 
     return form;

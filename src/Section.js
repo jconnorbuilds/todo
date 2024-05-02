@@ -12,7 +12,7 @@ export default class Section {
     this.idx = idx;
     this.projectId = projectId;
     this.name = name;
-    this.tasks = tasks ? tasks.map(task => Task.create(task)) : [];
+    this.tasks = tasks ? tasks.map((task) => Task.create(task)) : [];
     this.slug = slugify(this.name);
     Section.allSections.push(this);
     this.taskForm = new TaskForm(this.id);
@@ -29,7 +29,7 @@ export default class Section {
   static recalculateIndicies() {
     let sections = document.querySelectorAll('.main-window .section');
     let idx = 0;
-    sections.forEach(section => {
+    sections.forEach((section) => {
       let thisSection = this.getInstance(section.dataset.id);
       thisSection.idx = idx++;
       section.dataset.idx = thisSection.idx;
@@ -56,7 +56,7 @@ export default class Section {
   }
 
   static get id() {
-    while (Section.allSections.find(section => section.id === this.#_id)) {
+    while (Section.allSections.find((section) => section.id === this.#_id)) {
       ++this.#_id;
     }
     return this.#_id++;

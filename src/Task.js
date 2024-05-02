@@ -71,24 +71,22 @@ export default class Task {
       <label for="${forId}" class="todo-item__main-title">${this.title}</label>
       <div class="todo-item__description">${this.description}</div>
       <div class="todo-item__due-date ${dateDisplay.timelyClass}">
-      <i class="${FA_ICON_CLASSES}"></i>
-      <span>${dateDisplay.dueDateString}</span>
+        <i class="${FA_ICON_CLASSES}"></i>
+        <span>${dateDisplay.dueDateString}</span>
       </div>
     </div>
     `;
 
-    const toggleCompleted = e => {
+    const toggleCompleted = (e) => {
       let checked = e.target.checked;
       this.isCompleted = checked;
-      newItem
-        .querySelector('.todo-item__todo-info')
-        .classList.toggle('done', checked);
+      newItem.querySelector('.todo-item__todo-info').classList.toggle('done', checked);
       this.save();
     };
 
     taskContainer.insertBefore(
       newItem,
-      taskContainer.querySelector('div.new-todo-wrapper')
+      taskContainer.querySelector('div.new-todo-wrapper'),
     );
 
     newItem
@@ -123,9 +121,7 @@ export default class Task {
     } else {
       result.timelyClass = 'overdue';
       result.dueDateString =
-        daysUntilDue == -1
-          ? 'Yesterday'
-          : new Date(this.dueDate).toLocaleDateString();
+        daysUntilDue == -1 ? 'Yesterday' : new Date(this.dueDate).toLocaleDateString();
     }
     return result;
   }

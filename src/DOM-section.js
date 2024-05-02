@@ -1,8 +1,9 @@
 import { slugify } from './utils.js';
 import Project from './Project.js';
+import { dropdown } from './dropdown.js';
 const DEFAULT_SECTION_NAME = 'Default';
 
-const DOMSection = s => {
+const DOMSection = (s) => {
   const sectionEl = document.createElement('section');
   const sectionSlug = slugify(s.name);
 
@@ -16,6 +17,7 @@ const DOMSection = s => {
     </div>
   </div>
   `;
+
   const addTaskBtn = s.taskForm.addTaskBtn;
   sectionEl.querySelector('.new-todo-wrapper').append(addTaskBtn);
 
@@ -26,16 +28,28 @@ const DOMSection = s => {
   sectionEl.append(addSectionButton);
 
   addSectionButton.addEventListener('click', _drawNewSectionNameInput);
+
+  const actionsButton = sectionEl.querySelector(
+    '.section-header__actions button.actions',
+  );
+  if (actionsButton) dropdown(actionsButton);
+
   return sectionEl;
 };
 
-const _getTitleElInnerHTML = section => {
-  return section.name === DEFAULT_SECTION_NAME
+const _getTitleElInnerHTML = (section) =>
+  section.name === DEFAULT_SECTION_NAME
     ? ''
-    : `<div class="section-title">${section.name}</div>`;
-};
+    : `
+    <div class="section-header">
+      <div class="section-header__title">${section.name}</div>
+        <div class="section-header__actions">
+        <button class="actions"><i class="fa-solid fa-ellipsis"></i></button>
+      </div>
+    </div>
+    `;
 
-const _drawNewSectionNameInput = e => {
+const _drawNewSectionNameInput = (e) => {
   // Draw the input if it's not already open
   if (!document.querySelector('.section__new-section-name-input')) {
     let newSectionIdx = +e.target.closest('section.section').dataset.idx + 1;
@@ -50,7 +64,7 @@ const _drawNewSectionNameInput = e => {
     input.focus();
 
     // Create and draw the new section on form submit
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
       const project = Project.currentProject;
       const createdSection = project.addSection({
