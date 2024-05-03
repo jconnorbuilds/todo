@@ -1,4 +1,4 @@
-export const dropdown = (dropdownTarget) => {
+export const dropdownMenu = ({ dropdownTarget, items }) => {
   dropdownTarget.classList.add('dd-container');
 
   const dropdown = document.createElement('div');
@@ -6,17 +6,13 @@ export const dropdown = (dropdownTarget) => {
 
   const ul = document.createElement('ul');
   ul.classList.add('dropdown__list-holder');
-  const dropdownItemLabels = [
-    'Rename section',
-    'Do other stuff',
-    'Drink more coffee',
-    'More',
-  ];
 
-  dropdownItemLabels.forEach((label) => {
+  items.forEach((item) => {
     const li = document.createElement('li');
     li.classList.add('dropdown__item');
-    li.textContent = label;
+    li.textContent = item.label;
+
+    li.addEventListener('click', item.action);
     ul.append(li);
   });
 

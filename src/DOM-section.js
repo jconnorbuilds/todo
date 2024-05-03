@@ -1,15 +1,15 @@
 import { slugify } from './utils.js';
 import Project from './Project.js';
-import { dropdown } from './dropdown.js';
+import { dropdownMenu } from './dropdown.js';
 const DEFAULT_SECTION_NAME = 'Default';
 
 const DOMSection = (s) => {
   const sectionEl = document.createElement('section');
-  const sectionSlug = slugify(s.name);
 
+  // Set up the basic Section container
   sectionEl.dataset.idx = s.idx;
   sectionEl.dataset.id = s.id;
-  sectionEl.classList.add('section', sectionSlug);
+  sectionEl.classList.add('section', slugify(s.name));
   sectionEl.innerHTML += `
   ${_getTitleElInnerHTML(s)}
   <div class="new-todo-wrapper">
@@ -18,9 +18,11 @@ const DOMSection = (s) => {
   </div>
   `;
 
+  // Make the Add Task button
   const addTaskBtn = s.taskForm.addTaskBtn;
   sectionEl.querySelector('.new-todo-wrapper').append(addTaskBtn);
 
+  // Make the Add Section button
   const addSectionButton = document.createElement('button');
   addSectionButton.type = 'button';
   addSectionButton.classList = 'section__add-section-button';
@@ -29,10 +31,21 @@ const DOMSection = (s) => {
 
   addSectionButton.addEventListener('click', _drawNewSectionNameInput);
 
+  // Make the three-dot dropdown menu
   const actionsButton = sectionEl.querySelector(
     '.section-header__actions button.actions',
   );
-  if (actionsButton) dropdown(actionsButton);
+  if (actionsButton) {
+    dropdownMenu({
+      dropdownTarget: actionsButton,
+      items: [
+        { label: 'Rename section', action: () => console.log('Renaming section...') },
+        { label: 'Do other stuff', action: () => console.log('Doing stuff...') },
+        { label: 'Drink more coffee', action: () => console.log('Drinking...') },
+        { label: 'More actions...', action: () => console.log('Doing more...') },
+      ],
+    });
+  }
 
   return sectionEl;
 };
