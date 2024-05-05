@@ -3,23 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/3bfcb4bec9.js"
-            crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/3bfcb4bec9.js"
+      crossorigin="anonymous"
+    ></script>
     <title>Todo</title>
   </head>
-  <body>
+  <body class="dark">
     <div class="container">
       <div class="sidebar">
+        <div>
+          <button id="theme-switcher" class="light-padding">
+            <i class="fa-regular fa-lightbulb"></i>
+          </button>
+        </div>
+
         <div class="sidebar__heading heading">
           <h4>My Projects</h4>
-          <button class="sidebar__new-project heading-btn">
+          <button class="sidebar__new-project heading-btn light-padding">
             <i class="fa-regular fa-plus"></i>
           </button>
         </div>
-        <ul class="sidebar__projects-list">
-        </ul>
+        <ul class="sidebar__projects-list"></ul>
       </div>
-      <div class="main-window">
+      <div class="main-window dark">
         <h1 class="project-title">Home</h1>
       </div>
     </div>

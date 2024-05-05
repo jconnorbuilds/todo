@@ -1,6 +1,6 @@
 import { slugify } from './utils.js';
 import Project from './Project.js';
-import { dropdownMenu } from './dropdown.js';
+import iuDropdown from 'iu-dropdown';
 const DEFAULT_SECTION_NAME = 'Default';
 
 const DOMSection = (s) => {
@@ -35,8 +35,9 @@ const DOMSection = (s) => {
   const actionsButton = sectionEl.querySelector(
     '.section-header__actions button.actions',
   );
+
   if (actionsButton) {
-    dropdownMenu({
+    iuDropdown({
       dropdownTarget: actionsButton,
       items: [
         { label: 'Rename section', action: () => console.log('Renaming section...') },
@@ -44,6 +45,7 @@ const DOMSection = (s) => {
         { label: 'Drink more coffee', action: () => console.log('Drinking...') },
         { label: 'More actions...', action: () => console.log('Doing more...') },
       ],
+      options: { theme: 'system' },
     });
   }
 

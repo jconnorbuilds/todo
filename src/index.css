@@ -1,4 +1,5 @@
 @import './reset.css';
+@import './dropdown.css';
 
 :root {
   --main-bg-color: rgb(255 255 255);
@@ -8,29 +9,70 @@
   --secondary-font-color: rgb(93 93 93);
   --highlight-color: #d74057;
   --highlight-color-disabled: rgb(224 131 145);
-  --priority-default-rgb-values: 170 170 170;
-  --priority-urgent-rgb-values: 215 64 87;
-  --priority-low-rgb-values: 85 111 68;
-  --priority-mid-rgb-values: 255 209 49;
-  --priority-urgent-rgb-values: 215 64 87;
+  --priority-default-rgb-values: 170 218 246;
+  --priority-low-rgb-values: 85 192 13;
+  --priority-mid-rgb-values: 244 202 16;
+  --priority-urgent-rgb-values: 249 11 47;
   --priority-default: rgb(var(--priority-default-rgb-values));
   --priority-low: rgb(var(--priority-low-rgb-values));
   --priority-mid: rgb(var(--priority-mid-rgb-values));
   --priority-urgent: rgb(var(--priority-urgent-rgb-values));
   --button-hover-color: #ddd;
-  --default-border-color: #ccc;
+  --default-border-color: #cbcbcb;
+  --dueDate-default-color: rgb(137, 34, 137);
 }
 
 /* Style reference https://moderncss.dev/pure-css-custom-checkbox-style/ */
+body.dark {
+  color: var(--primary-font-color);
+  --primary-font-color: #fff;
+  --secondary-font-color: #a7a7a7;
+  --main-bg-color: rgb(48, 49, 57);
+  --secondary-bg-rgb-values: 33 33 35;
+  --secondary-bg-color: rgb(var(--secondary-bg-rgb-values));
+  --button-hover-color: #666;
+  --priority-default-rgb-values: 170 218 246;
+  --priority-low-rgb-values: 85 192 13;
+  --priority-mid-rgb-values: 244 202 16;
+  --priority-urgent-rgb-values: 249 11 47;
+  --priority-default: rgb(var(--priority-default-rgb-values));
+  --priority-low: rgb(var(--priority-low-rgb-values));
+  --priority-mid: rgb(var(--priority-mid-rgb-values));
+  --priority-urgent: rgb(var(--priority-urgent-rgb-values));
+  --default-border-color: #426262;
+  --due-date-default-color: rgb(182, 106, 182);
+}
+
+body.dark ::placeholder {
+  color: #888;
+}
+/* body.dark button {
+  color: var(--primary-font-color);
+}
+body.dark input {
+  color: inherit;
+} */
+
+.subtle-text {
+  color: var(--secondary-font-color);
+}
+
+body.dark .subtle-text {
+  color: #aaa;
+}
+
+input {
+  background-color: inherit;
+}
+
 input[type='checkbox'] {
   -webkit-appearance: none;
   appearance: none;
   /* For iOS < 15 to remove gradient background */
-  background-color: #fff;
   margin: 1px 0;
   width: 0.6em;
   height: 0.6em;
-  border: 1px solid #aaa;
+  border: 1px solid var(--default-border-color);
   border-radius: 0.15em;
   display: grid;
   place-content: center;
@@ -77,8 +119,12 @@ input[type='checkbox']:not(:checked):hover::before {
   opacity: 100;
   transition: opacity 300ms ease-in-out;
   /* also possible to use background color, but box-shadow makes it printable */
-  box-shadow: inset 1em 1em rgba(56, 56, 56, 0.3);
+  box-shadow: inset 1em 1em var(--secondary-font-color);
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type='checkbox']:checked {
+  background-color: var(--secondary-bg-color);
 }
 
 li {
@@ -98,7 +144,7 @@ div.gentle-btn {
 }
 
 div.gentle-btn {
-  background-color: #eee;
+  background-color: inherit;
 }
 
 .todo-item__checkbox {
@@ -111,15 +157,14 @@ button.add-todo {
   display: grid;
   grid-template-columns: 1em auto;
   text-align: start;
-  color: var(--secondary-font-color);
-  background-color: var(--main-bg-color);
+  background-color: inherit;
   padding: 0;
   border: none;
 }
 
 button.add-todo i {
   font-size: 1.2em;
-  color: #aaa;
+  color: var(--primary-font-color);
 }
 
 button.add-todo span {
@@ -149,11 +194,11 @@ button:disabled {
 }
 
 button:hover {
-  background-color: #ddd;
+  background-color: var(--button-hover-color);
 }
 
 button.gentle {
-  border: 1px solid #ccc;
+  border: 1px solid var(--default-border-color);
   background-color: inherit;
   width: max-content;
   padding: 2px 5px;
@@ -163,45 +208,6 @@ button.gentle {
 .dd-container {
   position: relative;
 }
-
-/* dropdown styles */
-.dropdown {
-  display: flex;
-  position: absolute;
-  top: 20px;
-  border: solid var(--default-border-color);
-  border-radius: 2px;
-  box-shadow: 3px 3px #ccc;
-  background-color: white;
-  right: 50%;
-  transform: translateX(50%);
-  z-index: 1;
-}
-
-.dropdown__list-holder {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  padding: 0;
-}
-
-.dropdown__item {
-  display: flex;
-  list-style: none;
-  flex: 1 1 auto;
-  white-space: nowrap;
-  padding: 0.5em;
-}
-
-.dropdown__item:hover {
-  background-color: #f9f9f9;
-  font-weight: 700;
-}
-
-.dropdown.hidden {
-  display: none;
-}
-/* end dropdown styles */
 
 .priority-btn--expanded .priority-btn__level-btn {
   padding: 4px 8px;
@@ -213,7 +219,7 @@ button.gentle {
 }
 
 .priority-btn--expanded .priority-btn__level-btn:hover {
-  background-color: #eee;
+  background-color: var(--button-hover-color);
 }
 
 .priority-btn__level-buttons-container {
@@ -221,7 +227,7 @@ button.gentle {
 }
 
 button.gentle:hover {
-  background-color: #eee;
+  background-color: var(--button-hover-color);
 }
 
 button[type='submit'] {
@@ -254,13 +260,16 @@ div.container {
   align-items: center;
 }
 
+.light-padding {
+  padding: 0.2em 0.5em;
+}
+
 .sidebar .heading-btn {
   font-size: 1em;
-  padding: 0 0.5em;
   border: none;
   border-radius: 4px;
   background-color: inherit;
-  color: var(--secondary-font-color);
+  color: var(--secondary-bg-color);
   transition: background-color 200ms;
 }
 .sidebar .heading-btn:hover {
@@ -284,7 +293,7 @@ div.container {
 .sidebar__project {
   display: flex;
   align-items: center;
-  justify-items: space-between;
+  justify-content: space-between;
   border-radius: 4px 0 0 4px;
   padding: 1px 6px;
   font-weight: 500;
@@ -324,7 +333,7 @@ div.container {
   background-color: inherit;
   border: none;
   outline: none;
-  border-bottom: 0.5px solid var(--secondary-font-color);
+  border-bottom: 0.5px solid var(--default-border-color);
 }
 
 .sidebar__project input:focus {
@@ -364,7 +373,7 @@ div.main-window h1 {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  border-bottom: 0.5px solid #ddd;
+  border-bottom: 0.5px solid var(--default-border-color);
 }
 
 .todo-item__todo-info.done {
@@ -390,7 +399,7 @@ div.main-window h1 {
 }
 
 .todo-item__due-date.on-time {
-  color: rgb(137, 34, 137);
+  color: var(--due-date-default-color);
 }
 
 .todo-item__due-date.overdue {
@@ -404,8 +413,8 @@ div.main-window h1 {
 form.task-form {
   display: grid;
   grid-template-rows: 1fr;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: inherit;
+  border: 1px solid var(--default-border-color);
   border-radius: 10px;
 }
 
@@ -451,15 +460,15 @@ form.task-form input[type='text']:first-child {
   display: grid;
   align-items: center;
   cursor: pointer;
-  color: #333;
-  background-color: #fff;
+  color: var(--primary-font-color);
+  background-color: inherit;
   border-radius: 4px;
   font-weight: 500;
   padding: 3px 10px;
 }
 
 .task-form-footer__project-selector:hover {
-  background-color: #eee;
+  background-color: var(--button-hover-color);
 }
 
 .task-form-footer__ {
@@ -471,7 +480,7 @@ form.task-form input[type='text']:first-child {
 }
 
 .task-form-footer__ {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--default-border-color);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -491,7 +500,6 @@ form.task-form input[type='text']:first-child {
 }
 
 .due-date-btn__date-input {
-  /* display: flex; */
   background-color: inherit;
   cursor: pointer;
 }
@@ -522,7 +530,7 @@ button.section__add-section-button:hover {
 
 .section-header {
   display: flex;
-  border-bottom: 0.5px solid #ddd;
+  border-bottom: 0.5px solid var(--default-border-color);
 }
 
 .section-header__title {

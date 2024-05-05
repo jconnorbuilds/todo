@@ -1,0 +1,61 @@
+/* Dropdown Styles */
+/* Dropdown target must be relatively positioned*/
+.dd-target {
+  position: relative;
+}
+
+/* Centers the dropdown below the target*/
+.dropdown {
+  display: flex;
+  font: inherit;
+  position: absolute;
+  top: 20px;
+  border: solid var(--default-border-color);
+  border-radius: 2px;
+  box-shadow: 3px 3px #ccc;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1;
+}
+
+.dropdown.light {
+  background-color: #fff;
+  color: #000;
+}
+
+.dropdown.dark {
+  background-color: #222;
+  color: #fff;
+}
+
+.dropdown__list-holder {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 0;
+}
+
+.dropdown__item {
+  display: flex;
+  list-style: none;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  padding: 0.5em;
+}
+
+.dropdown__item:hover {
+  font-weight: 700;
+}
+
+.dropdown.light .dropdown__item:hover {
+  background-color: #f9f9f9;
+}
+
+.dropdown.dark .dropdown__item:hover {
+  background-color: #444;
+}
+
+.dropdown.hidden {
+  display: none;
+}
+/* end Dropdown Styles */

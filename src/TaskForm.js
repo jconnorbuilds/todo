@@ -59,7 +59,7 @@ export default class TaskForm {
 
   makeAddTaskBtn() {
     const button = document.createElement('button');
-    button.classList.add('add-todo');
+    button.classList.add('add-todo', 'subtle-text');
     const plusIcon = document.createElement('i');
     plusIcon.classList.add('fa-regular', 'fa-square-plus');
 

@@ -9,8 +9,13 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+const documentBody = document.querySelector('body');
 const newProjectBtn = document.querySelector('button.sidebar__new-project');
 const sidebarProjectsList = document.querySelector('ul.sidebar__projects-list');
+const themeSwitcherBtn = document.querySelector('#theme-switcher');
+
+themeSwitcherBtn.addEventListener('click', () => documentBody.classList.toggle('dark'));
+
 newProjectBtn.addEventListener('click', () => {
   const li = document.createElement('li');
   li.classList = 'sidebar__project';
