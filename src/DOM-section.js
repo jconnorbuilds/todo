@@ -45,7 +45,7 @@ const DOMSection = (s) => {
         { label: 'Drink more coffee', action: () => console.log('Drinking...') },
         { label: 'More actions...', action: () => console.log('Doing more...') },
       ],
-      options: { theme: 'system' },
+      options: { theme: 'system' }, // Not actually based on system setting, just experimenting
     });
   }
 
